@@ -1,0 +1,14 @@
+{
+  "name": "glow-sans",
+  "version": "0.0.1",
+  "description": "Glow Sans CJK typeface",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Celestial Phineas",
+  "license": "OFL-1.1",
+  "devDependencies": {
+    "opencv": "^6.2.0"
+  }
+}
