@@ -5,7 +5,7 @@ const fs = require('fs');
 const process = require('process')
 
 const font = JSON.parse(fs.readFileSync(process.argv[2]).toString());
-const sampleText = '一三五水永过東南明湖区匪国國酬爱愛袋鸢鳶鬱靈鷹瞾';
+const sampleText = '一三五水永过東南明湖区匪国國酬爱愛袋鸢鳶鬱靈鷹曌龘';
 const sampleEntries = sampleText.split('')
   .map(char => {
     const uni = 'U+' + char.charCodeAt(0).toString(16).toUpperCase();

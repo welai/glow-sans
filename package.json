@@ -3,12 +3,15 @@
   "version": "0.0.1",
   "description": "Glow Sans CJK typeface",
   "main": "index.js",
+  "gypfile": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    
   },
   "author": "Celestial Phineas",
   "license": "OFL-1.1",
   "devDependencies": {
+    "canvas": "^2.6.1",
+    "nodemon": "^2.0.2",
     "opencv": "^6.2.0"
   }
 }

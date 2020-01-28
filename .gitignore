@@ -1,5 +1,7 @@
 node_modules
-**/playground.js
+**/playground.*
+
+__pycache__
 
 fonts/SourceHanSans*/
 fonts/*.zip
