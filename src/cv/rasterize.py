@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- encoding: utf8 -*-
 import cairocffi as cairo
 import numpy as np
 
