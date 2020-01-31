@@ -2,14 +2,16 @@
   "name": "glow-sans",
   "version": "0.0.1",
   "description": "Glow Sans CJK typeface",
-  "main": "index.js",
+  "main": "examples/index.js",
   "gypfile": true,
   "scripts": {
-    
+    "init-fonts": "cd fonts && bash init.sh",
+    "build-demo": "browserify examples/index.js > dist/index.js"
   },
   "author": "Celestial Phineas",
   "license": "OFL-1.1",
   "devDependencies": {
+    "browserify": "^16.5.0",
     "canvas": "^2.6.1",
     "nodemon": "^2.0.2",
     "opencv": "^6.2.0"

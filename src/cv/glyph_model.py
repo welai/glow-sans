@@ -33,8 +33,8 @@ class GlyphModel(object):
           on_pts.append(as_list(pt))
           on_contour_indices.append(contour_index)
         else:
-          if 0 <= x < 1000: x_bins[x].append('off' + str(len(on_pts)))
-          if 0 <= y < 1000: y_bins[y].append('off' + str(len(on_pts)))
+          if 0 <= x < 1000: x_bins[x].append('off' + str(len(off_pts)))
+          if 0 <= y < 1000: y_bins[y].append('off' + str(len(off_pts)))
           off_pts.append(as_list(pt))
           if previous_on:
             off_on_indices.append(len(on_pts) - 1)

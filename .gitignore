@@ -1,11 +1,11 @@
 node_modules
 **/playground.*
-
-__pycache__
-
+dist/
 fonts/SourceHanSans*/
 fonts/*.zip
 dump/*.json
+
+__pycache__
 
 # macOS
 # -----

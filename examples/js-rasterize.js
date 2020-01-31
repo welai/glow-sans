@@ -1,4 +1,4 @@
-// nodemon src/utils/playground.js localhost 8080
+// nodemon examples/js-rasterize.js localhost 8080
 const fs = require('fs');
 const http = require('http');
 const rasterize = require('../src/utils/rasterize');
