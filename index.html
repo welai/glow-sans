@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <title>Glow Sans demo</title>
+</head>
+<body>
+  <div id="ops" class="ops scrollable">
+    <div class="ops-content">
+      <form>
+        <label>Horizontal hairline</label>
+        <p class="range-field">
+          <input type="range" class="binded" min="10" max="200" step="1" data-bind="hair" />
+        </p>
+        <label>Curve width</label>
+        <p class="range-field">
+          <input type="range" class="binded" min="20" max="300" step="1" data-bind="curve" />
+        </p>
+        <label>Curve angle</label>
+        <p class="range-field">
+          <input type="range" class="binded" min="0" max="45" step="0.5" data-bind="curveAngle" />
+        </p>
+        <label>Horizontal superness</label>
+        <p class="range-field">
+          <input type="range" class="binded" min="0" max="1" step="0.01" data-bind="hSuper" />
+        </p>
+        <label>Vertical superness</label>
+        <p class="range-field">
+          <input type="range" class="binded" min="0" max="1" step="0.01" data-bind="vSuper" />
+        </p>
+      </form>
+    </div>
+  </div>
+  <div class="preview-column">
+    <div id="preview" class="preview-window"></div>
+  </div>
+</body>
+<script src="dist/index.js"></script>
+<link rel="stylesheet" href="dist/index.css"/>
+</html>

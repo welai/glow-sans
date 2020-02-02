@@ -5,15 +5,26 @@
   "main": "examples/index.js",
   "gypfile": true,
   "scripts": {
+    "build-demo": "browserify examples/index.js -o dist/index.js -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/proposal-class-properties ] ]",
+    "dump-fonts": "for FILE in fonts/*.otf; do otfccdump $FILE --pretty --ignore-hints --ignore-glyph-order --hex-cmap -o ${FILE//.otf/.json}; done",
     "init-fonts": "cd fonts && bash init.sh",
-    "build-demo": "browserify examples/index.js > dist/index.js"
+    "serve": "node scripts/serve-static.js"
   },
   "author": "Celestial Phineas",
   "license": "OFL-1.1",
   "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
+    "babelify": "^10.0.0",
     "browserify": "^16.5.0",
     "canvas": "^2.6.1",
+    "connect": "^3.7.0",
     "nodemon": "^2.0.2",
-    "opencv": "^6.2.0"
+    "opencv": "^6.2.0",
+    "serve-static": "^1.14.1"
+  },
+  "dependencies": {
+    "gridcanvas": "^0.1.6"
   }
 }
