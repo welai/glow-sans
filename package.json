@@ -8,6 +8,8 @@
     "build-demo": "browserify examples/index.js -o dist/index.js -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/proposal-class-properties ] ]",
     "dump-fonts": "for FILE in fonts/*.otf; do otfccdump $FILE --pretty --ignore-hints --ignore-glyph-order --hex-cmap -o ${FILE//.otf/.json}; done",
     "init-fonts": "cd fonts && bash init.sh",
+    "sample-fonts": "for FILE in fonts/SourceHanSansSC/SourceHanSansSC-*.json; do node scripts/sample.js $FILE ${FILE//'fonts/SourceHanSansSC'/'samples'}; done",
+    "samples2model": "for FILE in samples/*.json; do python -m scripts.glyph_model_convert $FILE ${FILE//.json/.model.json}; done",
     "serve": "node scripts/serve-static.js"
   },
   "author": "Celestial Phineas",
@@ -25,6 +27,6 @@
     "serve-static": "^1.14.1"
   },
   "dependencies": {
-    "gridcanvas": "^0.1.6"
+    "gridcanvas": "^0.1.8"
   }
 }

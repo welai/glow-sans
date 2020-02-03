@@ -12,25 +12,45 @@
   <div id="ops" class="ops scrollable">
     <div class="ops-content">
       <form>
-        <label>Horizontal hairline</label>
+        <div class="input-field">
+          <select id="weight-select">
+            <option value="0">ExtraLight</option>
+            <option value="1">Light</option>
+            <option value="2">Normal</option>
+            <option value="3" selected>Regular</option>
+            <option value="4">Medium</option>
+            <option value="5">Bold</option>
+            <option value="6">Heavy</option>
+          </select>
+          <label>字重 Weight</label>
+        </div>
+        <label>字重微调 Weight (optical size)</label>
         <p class="range-field">
-          <input type="range" class="binded" min="10" max="200" step="1" data-bind="hair" />
+          <input type="range" class="binded" min="0.75" max="1.25" step="0.01" data-bind="weight" />
         </p>
-        <label>Curve width</label>
+        <label>对比 Contrast</label>
         <p class="range-field">
-          <input type="range" class="binded" min="20" max="300" step="1" data-bind="curve" />
+          <input type="range" class="binded" min="0.75" max="1.25" step="0.01" data-bind="contrast" />
         </p>
-        <label>Curve angle</label>
+        <label>宽窄 Width</label>
         <p class="range-field">
-          <input type="range" class="binded" min="0" max="45" step="0.5" data-bind="curveAngle" />
+          <input type="range" class="binded" min="0.75" max="1.25" step="0.01" data-bind="width" />
         </p>
-        <label>Horizontal superness</label>
+        <label>字面 Tracking</label>
         <p class="range-field">
-          <input type="range" class="binded" min="0" max="1" step="0.01" data-bind="hSuper" />
+          <input type="range" class="binded" min="0.95" max="1.05" step="0.001" data-bind="tracking" />
         </p>
-        <label>Vertical superness</label>
+        <label>中宫 Counter</label>
         <p class="range-field">
-          <input type="range" class="binded" min="0" max="1" step="0.01" data-bind="vSuper" />
+          <input type="range" class="binded" min="0.92" max="1.08" step="0.001" data-bind="counter" />
+        </p>
+        <label>重心 Gravity</label>
+        <p class="range-field">
+          <input type="range" class="binded" min="0.92" max="1.08" step="0.001" data-bind="gravity" />
+        </p>
+        <label>软硬 Softness</label>
+        <p class="range-field">
+          <input type="range" class="binded" min="0.85" max="1.15" step="0.001" data-bind="softness" />
         </p>
       </form>
     </div>
@@ -39,6 +59,8 @@
     <div id="preview" class="preview-window"></div>
   </div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>M.AutoInit()</script>
 <script src="dist/index.js"></script>
 <link rel="stylesheet" href="dist/index.css"/>
 </html>
