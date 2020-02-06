@@ -1,6 +1,6 @@
-/** @typedef { (onRefs: [[number, number]],
- * onOffsets: [[number, number]], offOffsets: [[number, number]]) => 
- * [[[number, number]], [[number, number]], [[number, number]]] } Filter */
+/** @typedef { (onRefs: [number, number][],
+ * onOffsets: [number, number][], offOffsets: [number, number][]) => 
+ * [ [number, number][], [number, number][], [number, number][] ] } Filter */
 
 /** Morphological scaling 
  * @param { number } factor Scale factor

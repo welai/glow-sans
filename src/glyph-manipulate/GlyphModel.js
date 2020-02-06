@@ -18,9 +18,9 @@ function expandAlign(alignStr) {
 
 /** Average of the points to be aligned by x or y axis.
  * @param { 'x'|'y' } xOrY Average of x coordinate or y coordinate
- * @param { [[number, number]] } onPts 
- * @param { [[number, number]] } offPts 
- * @param { [{on: boolean, index: number}] } group Alignment information */
+ * @param { [number, number][] } onPts 
+ * @param { [number, number][] } offPts 
+ * @param { {on: boolean, index: number}[] } group Alignment information */
 function setCoordAvg(xOrY, onPts, offPts, group) {
   const ptIndex = xOrY === 'x' ? 0:1;
   // Average of the coordinates to align
@@ -36,8 +36,8 @@ function setCoordAvg(xOrY, onPts, offPts, group) {
 }
 
 /** Convert the on/off points to glyph contour representation
- * @param { [[number, number]] } onPts 
- * @param { [[number, number]] } offPts 
+ * @param { [number, number][] } onPts 
+ * @param { [number, number][] } offPts 
  * @param { number[] } offOnIndices 
  * @param { number[] } onContourIndices */
 function toGlyph(onPts, offPts, offOnIndices, onContourIndices) {
@@ -64,9 +64,9 @@ function toGlyph(onPts, offPts, offOnIndices, onContourIndices) {
 
 /** JavaScript implementation of glyph model manipulation and restoration */
 class GlyphModel {
-  /** @type { [[number, number]] } */ onRefs;
-  /** @type { [[number, number]] } */ onOffsets;
-  /** @type { [[number, number]] } */ offOffsets;
+  /** @type { [number, number][] } */ onRefs;
+  /** @type { [number, number][] } */ onOffsets;
+  /** @type { [number, number][] } */ offOffsets;
   /** @type { number[] } */           offOnIndices;
   /** @type { number[] } */           onContourIndices;
   /** @type { string[][] } */         xAlign;
@@ -74,8 +74,8 @@ class GlyphModel {
   
   /** Construct a glyph model from the parsed glyph model object
    * @param {{ 
-   * onRefs: [[number, number]], 
-   * onOffsets: [[number, number]], offOffsets: [[number, number]], 
+   * onRefs: [number, number][], 
+   * onOffsets: [number, number][], offOffsets: [number, number][], 
    * offOnIndices: number[], onContourIndices: number[], 
    * xAlign: string[][], yAlign: string[][] }} glyphModelObject 
    */
@@ -85,8 +85,8 @@ class GlyphModel {
 
   /** Handle alignments of given on-points and off-points using `this.xAlign`
    * and `this.yAlign`.
-   * @param { [[number, number]] } onPts 
-   * @param { [[number, number]] } offPts */
+   * @param { [number, number][] } onPts 
+   * @param { [number, number][] } offPts */
   align(onPts, offPts) {
     const xas = this.xAlign.map(group => group.map(expandAlign));
     const yas = this.yAlign.map(group => group.map(expandAlign));
@@ -96,10 +96,10 @@ class GlyphModel {
   }
 
   /** Restore the glyph contours.
-   * @param { (onRefs: [[number, number]],
-   * onOffsets: [[number, number]], offOffsets: [[number, number]]) => 
-   * [[[number, number]], [[number, number]], [[number, number]]] } transform
-   * @returns { [[{x: number, y: number, on: boolean}]] } */
+   * @param { (onRefs: [number, number][],
+   * onOffsets: [number, number][], offOffsets: [number, number][]) => 
+   * [[number, number][], [number, number][], [number, number][]] } transform
+   * @returns { {x: number, y: number, on: boolean}[][] } */
   restore(transform = ((a, b, c) => [a, b, c])) {
     const [ onRefs, onOffsets, offOffsets ] =
       transform(this.onRefs, this.onOffsets, this.offOffsets);
