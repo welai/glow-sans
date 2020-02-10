@@ -1,6 +1,7 @@
 const GlyphModel = require('../src/glyph-manipulate/GlyphModel');
 const GlyphPreviewPanel = require('../src/utils/GlyphPreviewPanel');
 const ModelFilters = require('../src/glyph-manipulate/ModelFilters');
+const detectFeet = require('../src/glyph-manipulate/detect-feet');
 
 // The parameters manipulatable by the UI elements
 const globalParams = window.globalParams = {
@@ -64,7 +65,7 @@ function getCurrentModels() {
   return keys.map(key => modelDict[key]);
 }
 /** Get the glyphs with filters
- * @returns { [[{ x: number, y: number, on: boolean }]] } */
+ * @returns { { x: number, y: number, on: boolean }[][] } */
 function getGlyphs() {
   return getCurrentModels().map(model => model.restore(ModelFilters.merge(
     ModelFilters.horizontalScale(globalParams.width),
@@ -80,9 +81,41 @@ function getAdvanceWidths() {
   return 1000 * globalParams.width;
 }
 function updatePreview() {
-  glyphPreviewPanel.glyphs = getGlyphs();
+  const glyphs = glyphPreviewPanel.glyphs = getGlyphs();
+  glyphPreviewPanel.highlights = getKeypoints(glyphs);
   glyphPreviewPanel.advanceWidths = getAdvanceWidths();
 }
+
+/** Estimate the vertical stroke width @returns { number } */
+function vStrokeWidth() {
+  const selector = $('#weight-select');
+  const yiGm = glyphModels[selector.val()]['uni2F00'];
+  if (!yiGm) 
+    throw Error('The character uni2F00 must be included in the glyph models.');
+  const yiGlyph = yiGm.restore(
+    ModelFilters.weightAdjustment(globalParams.weight)
+  );
+  const hStrokeWidth = (yiGlyph[0][0].y - yiGlyph[0][1].y)*0.8;
+  const contrast = globalParams.contrast;
+  return hStrokeWidth/(2-contrast)*contrast;
+}
+
+/** TODO: This is temporary
+ * @param { { x: number, y: number, on: boolean }[][] } glyphs
+ * @returns { [ number, number, number ][] } */
+function getKeypoints(glyphs) {
+  /** @type { [ number, number, number ] } */
+  const keypoints = [];
+  const strokeWidth = vStrokeWidth();
+  glyphs.forEach((glyph, gi) => glyph.forEach((contour, ci) => {
+    const [ leftFeet, rightFeet ] = detectFeet(
+      contour, { maxStroke: strokeWidth * 1.5, longestFoot: 110 });
+    leftFeet.forEach(pi => keypoints.push([gi, ci, pi]));
+    rightFeet.forEach(pi => keypoints.push([gi, ci, pi]));
+  }));
+  return keypoints;
+}
+
 // Initialization
 window.addEventListener('load', () => {
   const glyphPreviewPanel = window.glyphPreviewPanel =

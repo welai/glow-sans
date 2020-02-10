@@ -4,14 +4,18 @@ const gridcanvas = require('gridcanvas');
 const GridCanvas = window.GridCanvas;
 
 class GlyphPreviewPanel {
+  /** @type { { x: number, y: number, on: boolean }[][][] } */
   _glyphs = [];
-  /** @type { [[[{ x: number, y: number, on: boolean }]]] } Glyphs to display */
+  /** @type { { x: number, y: number, on: boolean }[][][] } Glyphs to display */
   get glyphs() { return this._glyphs; }
   set glyphs(newVal) {
+    let changeHighlights = false;
     this._glyphs = newVal; 
     this.updateLayout(); 
     this.gridCanvas.display();
   }
+
+  /** @type { number | number[] } */
   _advanceWidths = 1000;
   /** @type { number | number[] } Advance widths of the glyphs (upm = 1000) */
   get advanceWidths() { return this._advanceWidths; }
@@ -21,6 +25,16 @@ class GlyphPreviewPanel {
     this.gridCanvas.display();
   }
 
+  /** @type { [ number, number, number ][] } */
+  _highlights = [];
+  /** @type { [ number, number, number ][] } Indices for the highlight point, by 
+   * the glyph index, the contour index and the point index. */
+  get highlights() { return this._highlights; }
+  set highlights(newVal) { 
+    this._highlights = newVal;
+    this.gridCanvas.display();
+  }
+ 
   /** @type { Readonly<number> } Preview window available width */  width;
   /** @type { Readonly<number> } Preview window available height */ height;
   /** @type { Readonly<number> } Preview window padding */          padding;
@@ -103,7 +117,8 @@ class GlyphPreviewPanel {
 
   /** Glyph coordinates to gridCanvas project coordinates
    * @param { number } index Index of the glyph
-   * @returns { [ number => number, number => number ] } x, y transformations */
+   * @returns { [ (x: number) => number, (y: number) => number ] } 
+   * x, y transformations */
   _2p(index) {
     const [ x0,  y0 ] = this._origins[index];
     const x2p = x => x0 + x/this.upm*this.fontSize;
@@ -122,6 +137,23 @@ class GlyphPreviewPanel {
       return [ p2vX(x2p(x)), p2vY(y2p(y)) ];
     }
   }
+
+  /** Draw a point with the given project coordinate
+   * @param { CanvasRenderingContext2D } ctx
+   * @param { number } px Project x @param { number } py Project y
+   * @param { string } style */
+  drawProjectPoint(ctx, px, py, style) {
+    const vx = this.gridCanvas.p2vX(px), vy = this.gridCanvas.p2vY(py);
+    const savedCtx = { fillStyle: ctx.fillStyle, lineWidth: ctx.lineWidth,
+      strokeStyle: ctx.strokeStyle };
+    // TODO: The style is to-be-implemented
+    ctx.fillStyle = '#EE2222';
+    ctx.beginPath();
+    ctx.arc(vx, vy, this.gridCanvas.resolution * 4, 0, 2*Math.PI);
+    ctx.fill()
+    Object.assign(ctx, savedCtx);
+  }
+
   /** Draw a single glyph
    * @param { CanvasRenderingContext2D } ctx 
    * @param { number } index */
@@ -147,7 +179,22 @@ class GlyphPreviewPanel {
         }
       }
     });
+    ctx.closePath();
     ctx.fill();
+  }
+
+  /** Draw the highlighted points 
+   * @param { CanvasRenderingContext2D } ctx */
+  drawHighlights(ctx) {
+    this._highlights.forEach(giCiPi => {
+      const [ gi, ci, pi ] = giCiPi;
+      if (gi in this._glyphs && ci in this._glyphs[gi] 
+        && pi in this._glyphs[gi][ci]) {
+          const pt = this._glyphs[gi][ci][pi];
+          const [ x2p, y2p ] = this._2p(gi);
+          this.drawProjectPoint(ctx, x2p(pt.x), y2p(pt.y), 'highlight');
+        }
+    });
   }
 
   /** Redraw upper layer callback
@@ -155,7 +202,8 @@ class GlyphPreviewPanel {
   redrawUpper = (ctx) => {
     ctx.clearRect(0, 0, 
       this.gridCanvas.upperLayer.width, this.gridCanvas.upperLayer.height);
-    for (let i in this.glyphs) this.drawGlyph(ctx, i);
+    for (let i in this._glyphs) this.drawGlyph(ctx, i);
+    this.drawHighlights(ctx);
   }
 }
 
