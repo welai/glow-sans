@@ -1,6 +1,7 @@
 const GlyphModel = require('../src/glyph-manipulate/GlyphModel');
 const GlyphPreviewPanel = require('../src/utils/GlyphPreviewPanel');
 const ModelFilters = require('../src/glyph-manipulate/ModelFilters');
+const PostFilters = require('../src/glyph-manipulate/PostFilters');
 const detectFeet = require('../src/glyph-manipulate/detect-feet');
 
 // The parameters manipulatable by the UI elements
@@ -11,18 +12,21 @@ const globalParams = window.globalParams = {
   tracking: 1.0,
   counter: 1.0,
   gravity: 1.0,
-  softness: 1.0
+  softness: 1.0,
+  feetremoval: false
 };
 /** Bind the UI to globalParams */
 globalParams.bindUI = function () {
   $('.binded').each((index, elem) => {
     const param = elem.getAttribute('data-bind');
     $(elem).on('input', () => {
-      this[param] = Number.parseFloat(elem.value);
+      if (elem.type === 'range') this[param] = Number.parseFloat(elem.value);
+      if (elem.type === 'checkbox') this[param] = elem.checked;
       const event = new CustomEvent('param-change', { detail: param });
       window.dispatchEvent(event);
     });
-    $(elem).val(this[param]);
+    if (elem.type === 'range') $(elem).val(this[param]);
+    if (elem.type === 'checkbox') elem.checked = globalParams.feetremoval;
   });
 }
 
@@ -67,6 +71,9 @@ function getCurrentModels() {
 /** Get the glyphs with filters
  * @returns { { x: number, y: number, on: boolean }[][] } */
 function getGlyphs() {
+  const strokeWidth = vStrokeWidth();
+  const removeFeetFilter = PostFilters.removeFeet(
+    { maxStroke: strokeWidth * 1.5, longestFoot: 110 });
   return getCurrentModels().map(model => model.restore(ModelFilters.merge(
     ModelFilters.horizontalScale(globalParams.width),
     ModelFilters.radialScale(globalParams.tracking),
@@ -75,14 +82,18 @@ function getGlyphs() {
     ModelFilters.weightAdjustment(globalParams.weight),
     ModelFilters.contrastAdjustment(globalParams.contrast),
     ModelFilters.soften(globalParams.softness)
-  )));
+  ))).map(glyph => {
+    const postFilters = [];
+    if (globalParams.feetremoval) postFilters.push(removeFeetFilter);
+    return PostFilters.merge(...postFilters)(glyph);
+  });
 }
 function getAdvanceWidths() {
   return 1000 * globalParams.width;
 }
 function updatePreview() {
-  const glyphs = glyphPreviewPanel.glyphs = getGlyphs();
-  glyphPreviewPanel.highlights = getKeypoints(glyphs);
+  const glyphs = getGlyphs();
+  glyphPreviewPanel.glyphs = glyphs;
   glyphPreviewPanel.advanceWidths = getAdvanceWidths();
 }
 
