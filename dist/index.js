@@ -1,7 +1,7 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 
-var _$;
+var _$, _$2;
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
@@ -69,6 +69,18 @@ var shsWeights = ['ExtraLight', 'Light', 'Normal', 'Regular', 'Medium', 'Bold', 
 var modelFilenames = shsWeights.map(function (w) {
   return "samples/SourceHanSansSC-".concat(w, ".model.json");
 });
+/** Available Fira weights */
+
+var firaWeights = ['Two', 'Four', 'Eight', 'Hair', 'Thin', 'UltraLight', 'ExtraLight', 'Light', 'Regular', 'Book', 'Medium', 'SemiBold', 'Bold', 'ExtraBold', 'Heavy'];
+/** Available Fira widths */
+
+var firaWidths = ['Normal', 'Condensed', 'Compressed'];
+/** Paths of the fira samples */
+
+var firaFilenames = [];
+firaWeights.forEach(function (w) {
+  return firaFilenames.push("samples/FiraSans-".concat(w, ".json"), "samples/FiraSansCondensed-".concat(w, ".json"), "samples/FiraSansCompressed-".concat(w, ".json"));
+});
 /** SHSans glyph models. 
  * @type { { [key: string]: GlyphModel }[] } */
 
@@ -98,6 +110,26 @@ var modelPromise = (_$ = $).when.apply(_$, _toConsumableArray(modelFilenames.map
   });
 })["catch"](function (reason) {
   console.error(reason);
+});
+/** Fira font samples 
+* @typedef { { x: number, y: number, on: boolean }[][] } GlyphData
+* @type { { [key: string]: { advanceWidth: number, contours: GlyphData } } } */
+
+
+var firaSamples;
+
+var firaPromise = (_$2 = $).when.apply(_$2, _toConsumableArray(firaFilenames.map(function (path) {
+  return $.get(path);
+}))).then(function () {
+  for (var _len2 = arguments.length, resArr = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+    resArr[_key2] = arguments[_key2];
+  }
+
+  firaSamples = resArr.map(function (res) {
+    return res[0];
+  }); // TODO: remove this line    
+
+  window.firaSamples = firaSamples;
 });
 /** Sample text */
 
@@ -191,7 +223,7 @@ window.addEventListener('load', function () {
   var glyphPreviewPanel = window.glyphPreviewPanel = new GlyphPreviewPanel('preview');
   window.globalParams.bindUI(); // Update preview
 
-  modelPromise.then(updatePreview);
+  $.when(modelPromise, firaPromise).then(updatePreview);
   window.addEventListener('param-change', updatePreview);
   $('#weight-select').on('change', updatePreview);
 });

@@ -37,6 +37,19 @@ const shsWeights = [ 'ExtraLight', 'Light', 'Normal', 'Regular',
 /** Paths of the glyph models */
 const modelFilenames = shsWeights.map(
   w => `samples/SourceHanSansSC-${w}.model.json`);
+/** Available Fira weights */
+const firaWeights = [ 'Two', 'Four', 'Eight', 'Hair', 'Thin', 'UltraLight',
+'ExtraLight', 'Light', 'Regular', 'Book', 'Medium', 'SemiBold', 'Bold',
+'ExtraBold', 'Heavy' ];
+/** Available Fira widths */
+const firaWidths = [ 'Normal', 'Condensed', 'Compressed' ];
+/** Paths of the fira samples */
+const firaFilenames = [];
+firaWeights.forEach(w => firaFilenames.push(
+  `samples/FiraSans-${w}.json`,
+  `samples/FiraSansCondensed-${w}.json`,
+  `samples/FiraSansCompressed-${w}.json`
+));
 
 /** SHSans glyph models. 
  * @type { { [key: string]: GlyphModel }[] } */
@@ -44,7 +57,7 @@ var glyphModels;
 /** Promise for all model download */
 const modelPromise = $.when(...modelFilenames.map(path => $.get(path)))
   .then((...resArr) => {
-    glyphModels = resArr.map((res) => {
+    glyphModels = resArr.map(res=> {
       const gmDict = res[0];
       const chars = Object.keys(gmDict);
       const models = Object.values(gmDict)
@@ -56,6 +69,16 @@ const modelPromise = $.when(...modelFilenames.map(path => $.get(path)))
   }).catch(reason => {
     console.error(reason);
   });
+
+  /** Fira font samples 
+ * @typedef { { x: number, y: number, on: boolean }[][] } GlyphData
+ * @type { { [key: string]: { advanceWidth: number, contours: GlyphData } } } */
+var firaSamples;
+const firaPromise = $.when(...firaFilenames.map(path => $.get(path)))
+  .then((...resArr) => {
+    firaSamples = resArr.map(res => res[0]);
+  });
+// TODO: Fira in UI
 
 /** Sample text */
 const sampelText = '⼀三五⽔永过東南明湖区匪国國酬爱愛袋鸢鳶鬱靈鷹曌龘';
@@ -133,7 +156,7 @@ window.addEventListener('load', () => {
     new GlyphPreviewPanel('preview');
   window.globalParams.bindUI();
   // Update preview
-  modelPromise.then(updatePreview);
+  $.when(modelPromise, firaPromise).then(updatePreview);
   window.addEventListener('param-change', updatePreview);
   $('#weight-select').on('change', updatePreview);
 });

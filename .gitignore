@@ -1,6 +1,8 @@
 node_modules
 **/playground.*
-fonts/SourceHanSans*/
+fonts/*/*.otf
+fonts/*/*.json
+fonts/*/*.txt
 fonts/*.zip
 dump/*.json
 

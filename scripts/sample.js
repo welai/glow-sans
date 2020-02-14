@@ -22,4 +22,4 @@ const sampleEntries = sampleText.split('')
 
 const sample = Object.assign({}, ...sampleEntries);
 
-fs.writeFileSync(process.argv[3], JSON.stringify(sample));
+// fs.writeFileSync(process.argv[3], JSON.stringify(sample));

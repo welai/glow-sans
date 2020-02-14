@@ -3,9 +3,8 @@ const { Canvas } = require('canvas');
 const cv = require('opencv');
 
 /** Draw the glyph on canvas
- * @param {CanvasRenderingContext2D} ctx 
- * @param {[[{ x: number, y: number, on: boolean }]]} glyph 
- */
+ * @param { CanvasRenderingContext2D } ctx 
+ * @param { { x: number, y: number, on: boolean }[][] } glyph */
 function drawGlyph(ctx, glyph) {
   /** @type {(pt: {x: number, y: number, on: boolean}) => [number, number]} */
   const xy = pt => [ pt.x, pt.y ];
