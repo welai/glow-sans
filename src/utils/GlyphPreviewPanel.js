@@ -1,3 +1,4 @@
+// Wrapped UI component for the glyph preview
 const gridcanvas = require('gridcanvas');
 
 /** @type { typeof gridcanvas.default } */

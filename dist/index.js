@@ -31,6 +31,7 @@ var detectFeet = require('../src/glyph-manipulate/detect-feet'); // The paramete
 
 
 var globalParams = window.globalParams = {
+  fontsize: 100,
   width: 1.0,
   weight: 1.0,
   contrast: 1.0,
@@ -38,7 +39,9 @@ var globalParams = window.globalParams = {
   counter: 1.0,
   gravity: 1.0,
   softness: 1.0,
-  feetremoval: false
+  feetremoval: false,
+  baseline: 100,
+  latinscale: 1.0
 };
 /** Bind the UI to globalParams */
 
@@ -71,7 +74,7 @@ var modelFilenames = shsWeights.map(function (w) {
 });
 /** Available Fira weights */
 
-var firaWeights = ['Two', 'Four', 'Eight', 'Hair', 'Thin', 'UltraLight', 'ExtraLight', 'Light', 'Regular', 'Book', 'Medium', 'SemiBold', 'Bold', 'ExtraBold', 'Heavy'];
+var firaWeights = ['Two', 'Four', 'Eight', 'Hair', 'Thin', 'UltraLight', 'ExtraLight', 'Light', 'Book', 'Regular', 'Medium', 'SemiBold', 'Bold', 'ExtraBold', 'Heavy'];
 /** Available Fira widths */
 
 var firaWidths = ['Normal', 'Condensed', 'Compressed'];
@@ -113,7 +116,7 @@ var modelPromise = (_$ = $).when.apply(_$, _toConsumableArray(modelFilenames.map
 });
 /** Fira font samples 
 * @typedef { { x: number, y: number, on: boolean }[][] } GlyphData
-* @type { { [key: string]: { advanceWidth: number, contours: GlyphData } } } */
+* @type { {[key: string]: { advanceWidth: number, contours: GlyphData }}[] } */
 
 
 var firaSamples;
@@ -127,14 +130,12 @@ var firaPromise = (_$2 = $).when.apply(_$2, _toConsumableArray(firaFilenames.map
 
   firaSamples = resArr.map(function (res) {
     return res[0];
-  }); // TODO: remove this line    
-
-  window.firaSamples = firaSamples;
+  });
 });
 /** Sample text */
 
 
-var sampelText = '⼀三五⽔永过東南明湖区匪国國酬爱愛袋鸢鳶鬱靈鷹曌龘';
+var sampelText = '⼀三五⽔永过東南明湖区匪国國酬爱愛袋鸢鳶鬱靈鷹曌龘 Height 012369';
 /** Get glyph models by the selected heights
  * @returns { GlyphModel[] } */
 
@@ -148,33 +149,81 @@ function getCurrentModels() {
     return modelDict[key];
   });
 }
+/** Get current fira glyphs
+ * @returns {{[key: string]: { advanceWidth: number, contours: GlyphData }}} */
+
+
+function getCurrentFira() {
+  var firaWeight = $('#fira-weight-select').val();
+  var firaWidth = $('#fira-width-select').val();
+  var index = parseInt(firaWeight) * 3 + parseInt(firaWidth);
+  return firaSamples[index];
+}
 /** Get the glyphs with filters
  * @returns { { x: number, y: number, on: boolean }[][] } */
 
 
 function getGlyphs() {
   var strokeWidth = vStrokeWidth();
+  var modelFilter = ModelFilters.merge(ModelFilters.horizontalScale(globalParams.width), ModelFilters.radialScale(globalParams.tracking), ModelFilters.counterScale(globalParams.counter), ModelFilters.gravityAdjustment(globalParams.gravity), ModelFilters.weightAdjustment(globalParams.weight), ModelFilters.contrastAdjustment(globalParams.contrast), ModelFilters.soften(globalParams.softness));
   var removeFeetFilter = PostFilters.removeFeet({
     maxStroke: strokeWidth * 1.5,
     longestFoot: 110
   });
-  return getCurrentModels().map(function (model) {
-    return model.restore(ModelFilters.merge(ModelFilters.horizontalScale(globalParams.width), ModelFilters.radialScale(globalParams.tracking), ModelFilters.counterScale(globalParams.counter), ModelFilters.gravityAdjustment(globalParams.gravity), ModelFilters.weightAdjustment(globalParams.weight), ModelFilters.contrastAdjustment(globalParams.contrast), ModelFilters.soften(globalParams.softness)));
-  }).map(function (glyph) {
-    var postFilters = [];
-    if (globalParams.feetremoval) postFilters.push(removeFeetFilter);
-    return PostFilters.merge.apply(PostFilters, postFilters)(glyph);
+  var postFilterList = [];
+  if (globalParams.feetremoval) postFilterList.push(removeFeetFilter);
+  var postFilter = PostFilters.merge.apply(PostFilters, postFilterList);
+  var latinPostFilter = PostFilters.merge(PostFilters.translation(0, globalParams.baseline), PostFilters.scaling(globalParams.latinscale));
+  var glyphModels = getCurrentModels();
+  var glyphs = [];
+  glyphModels.forEach(function (model, i) {
+    if (model === undefined) {
+      var _char2 = sampelText[i];
+      var currentFira = getCurrentFira();
+
+      if (_char2 === ' ') {
+        glyphs.push([]);
+        return;
+      }
+
+      if (!(_char2 in currentFira)) {
+        console.warn("\"".concat(_char2, "\" is not found in glyph data."));
+        return;
+      }
+
+      var glyphsContour = currentFira[_char2].contours;
+      glyphs.push(latinPostFilter(glyphsContour));
+    } else {
+      glyphs.push(postFilter(model.restore(modelFilter)));
+    }
   });
+  return glyphs;
 }
 
 function getAdvanceWidths() {
-  return 1000 * globalParams.width;
+  var advanceWidths = [];
+  var glyphModels = getCurrentModels();
+  glyphModels.forEach(function (model, i) {
+    if (model !== undefined) {
+      advanceWidths.push(1000 * globalParams.width);
+      return;
+    }
+
+    var _char3 = sampelText[i],
+        currentFira = getCurrentFira();
+    if (_char3 === ' ') advanceWidths.push(300);else if (_char3 in currentFira) {
+      var glyphWidth = currentFira[_char3].advanceWidth;
+      advanceWidths.push(glyphWidth * globalParams.latinscale);
+    }
+  });
+  return advanceWidths;
 }
 
 function updatePreview() {
   var glyphs = getGlyphs();
   glyphPreviewPanel.glyphs = glyphs;
   glyphPreviewPanel.advanceWidths = getAdvanceWidths();
+  glyphPreviewPanel.fontSize = globalParams.fontsize;
 }
 /** Estimate the vertical stroke width @returns { number } */
 
@@ -226,6 +275,8 @@ window.addEventListener('load', function () {
   $.when(modelPromise, firaPromise).then(updatePreview);
   window.addEventListener('param-change', updatePreview);
   $('#weight-select').on('change', updatePreview);
+  $('#fira-weight-select').on('change', updatePreview);
+  $('#fira-width-select').on('change', updatePreview);
 });
 
 },{"../src/glyph-manipulate/GlyphModel":3,"../src/glyph-manipulate/ModelFilters":4,"../src/glyph-manipulate/PostFilters":5,"../src/glyph-manipulate/detect-feet":6,"../src/utils/GlyphPreviewPanel":7}],2:[function(require,module,exports){
@@ -576,6 +627,20 @@ function soften(factor) {
     return [onRefs, onOffsets, scaledOffOffsets];
   };
 }
+/** Translation
+ * @param { number } xOffset
+ * @param { number } yOffset
+ * @returns { Filter } */
+
+
+function translation(xOffset, yOffset) {
+  return function (onRefs, onOffsets, offOffsets) {
+    var translatedOnRefs = onRefs.map(function (pt) {
+      return [pt[0] + xOffset, pt[1] + yOffset];
+    });
+    return [translatedOnRefs, onOffsets, offOffsets];
+  };
+}
 /** Merge the application of the filters
  * @param  {...Filter} filters 
  * @returns { Filter } */
@@ -630,6 +695,7 @@ module.exports = {
   counterScale: counterScale,
   gravityAdjustment: gravityAdjustment,
   soften: soften,
+  translation: translation,
   merge: merge
 };
 
@@ -709,8 +775,48 @@ function removeFeet() {
     });
   };
 }
+/** Translation
+ * @param { number } xOffset 
+ * @param { number } yOffset 
+ * @returns { PostFilter } */
+
+
+function translation(xOffset, yOffset) {
+  return function (glyph) {
+    return glyph.map(function (contour) {
+      return contour.map(function (pt) {
+        return {
+          x: pt.x + xOffset,
+          y: pt.y + yOffset,
+          on: pt.on
+        };
+      });
+    });
+  };
+}
+/** Scaling
+ * @param { number } xRatio 
+ * @param { number } yRatio 
+ * @returns { PostFilter } */
+
+
+function scaling(xRatio) {
+  var yRatio = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : xRatio;
+  return function (glyph) {
+    return glyph.map(function (contour) {
+      return contour.map(function (pt) {
+        return {
+          x: pt.x * xRatio,
+          y: pt.y * yRatio,
+          on: pt.on
+        };
+      });
+    });
+  };
+}
 /** Merge filters
- * @param  {...PostFilter} filters */
+ * @param  {...PostFilter} filters
+ * @returns { PostFilter } */
 
 
 function merge() {
@@ -730,6 +836,8 @@ function merge() {
 
 module.exports = {
   removeFeet: removeFeet,
+  translation: translation,
+  scaling: scaling,
   merge: merge
 };
 
@@ -895,6 +1003,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+// Wrapped UI component for the glyph preview
 var gridcanvas = require('gridcanvas');
 /** @type { typeof gridcanvas.default } */
 

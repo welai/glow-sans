@@ -6,6 +6,7 @@ const detectFeet = require('../src/glyph-manipulate/detect-feet');
 
 // The parameters manipulatable by the UI elements
 const globalParams = window.globalParams = {
+  fontsize: 100,
   width: 1.0,
   weight: 1.0,
   contrast: 1.0,
@@ -13,7 +14,9 @@ const globalParams = window.globalParams = {
   counter: 1.0,
   gravity: 1.0,
   softness: 1.0,
-  feetremoval: false
+  feetremoval: false,
+  baseline: 100,
+  latinscale: 1.0
 };
 /** Bind the UI to globalParams */
 globalParams.bindUI = function () {
@@ -39,7 +42,7 @@ const modelFilenames = shsWeights.map(
   w => `samples/SourceHanSansSC-${w}.model.json`);
 /** Available Fira weights */
 const firaWeights = [ 'Two', 'Four', 'Eight', 'Hair', 'Thin', 'UltraLight',
-'ExtraLight', 'Light', 'Regular', 'Book', 'Medium', 'SemiBold', 'Bold',
+'ExtraLight', 'Light', 'Book', 'Regular', 'Medium', 'SemiBold', 'Bold',
 'ExtraBold', 'Heavy' ];
 /** Available Fira widths */
 const firaWidths = [ 'Normal', 'Condensed', 'Compressed' ];
@@ -72,16 +75,15 @@ const modelPromise = $.when(...modelFilenames.map(path => $.get(path)))
 
   /** Fira font samples 
  * @typedef { { x: number, y: number, on: boolean }[][] } GlyphData
- * @type { { [key: string]: { advanceWidth: number, contours: GlyphData } } } */
+ * @type { {[key: string]: { advanceWidth: number, contours: GlyphData }}[] } */
 var firaSamples;
 const firaPromise = $.when(...firaFilenames.map(path => $.get(path)))
   .then((...resArr) => {
     firaSamples = resArr.map(res => res[0]);
   });
-// TODO: Fira in UI
 
 /** Sample text */
-const sampelText = '⼀三五⽔永过東南明湖区匪国國酬爱愛袋鸢鳶鬱靈鷹曌龘';
+const sampelText = '⼀三五⽔永过東南明湖区匪国國酬爱愛袋鸢鳶鬱靈鷹曌龘 Height 012369';
 /** Get glyph models by the selected heights
  * @returns { GlyphModel[] } */
 function getCurrentModels() {
@@ -91,13 +93,20 @@ function getCurrentModels() {
   const modelDict = glyphModels[selector.val()];
   return keys.map(key => modelDict[key]);
 }
+/** Get current fira glyphs
+ * @returns {{[key: string]: { advanceWidth: number, contours: GlyphData }}} */
+function getCurrentFira() {
+  const firaWeight = $('#fira-weight-select').val();
+  const firaWidth = $('#fira-width-select').val();
+  const index = parseInt(firaWeight) * 3 + parseInt(firaWidth);
+  return firaSamples[index];
+}
+
 /** Get the glyphs with filters
  * @returns { { x: number, y: number, on: boolean }[][] } */
 function getGlyphs() {
   const strokeWidth = vStrokeWidth();
-  const removeFeetFilter = PostFilters.removeFeet(
-    { maxStroke: strokeWidth * 1.5, longestFoot: 110 });
-  return getCurrentModels().map(model => model.restore(ModelFilters.merge(
+  const modelFilter = ModelFilters.merge(
     ModelFilters.horizontalScale(globalParams.width),
     ModelFilters.radialScale(globalParams.tracking),
     ModelFilters.counterScale(globalParams.counter),
@@ -105,19 +114,58 @@ function getGlyphs() {
     ModelFilters.weightAdjustment(globalParams.weight),
     ModelFilters.contrastAdjustment(globalParams.contrast),
     ModelFilters.soften(globalParams.softness)
-  ))).map(glyph => {
-    const postFilters = [];
-    if (globalParams.feetremoval) postFilters.push(removeFeetFilter);
-    return PostFilters.merge(...postFilters)(glyph);
+  );
+  const removeFeetFilter = PostFilters.removeFeet(
+    { maxStroke: strokeWidth * 1.5, longestFoot: 110 });
+  const postFilterList = [];
+  if (globalParams.feetremoval) postFilterList.push(removeFeetFilter);
+  const postFilter = PostFilters.merge(...postFilterList);
+  const latinPostFilter = PostFilters.merge(
+    PostFilters.translation(0, globalParams.baseline),
+    PostFilters.scaling(globalParams.latinscale));
+  const glyphModels = getCurrentModels();
+  const glyphs = [];
+
+  glyphModels.forEach((model, i) => {
+    if (model === undefined) {
+      const char = sampelText[i]
+      const currentFira = getCurrentFira();
+      if (char === ' ') { glyphs.push([]); return; }
+      if (!(char in currentFira)) {
+        console.warn(`"${char}" is not found in glyph data.`);
+        return;
+      }
+      const glyphsContour = currentFira[char].contours;
+      glyphs.push(latinPostFilter(glyphsContour));
+    } else {
+      glyphs.push(postFilter(model.restore(modelFilter)));
+    }
   });
+  return glyphs;
 }
 function getAdvanceWidths() {
-  return 1000 * globalParams.width;
+  const advanceWidths = [];
+  const glyphModels = getCurrentModels();
+
+  glyphModels.forEach((model, i) => {
+    if (model !== undefined) { 
+      advanceWidths.push(1000 * globalParams.width); return;
+    }
+    const char = sampelText[i], currentFira = getCurrentFira();
+    if (char === ' ')
+      advanceWidths.push(300);
+    else if (char in currentFira) {
+      const glyphWidth = currentFira[char].advanceWidth;
+      advanceWidths.push(glyphWidth * globalParams.latinscale);
+    }
+  });
+  return advanceWidths;
 }
 function updatePreview() {
   const glyphs = getGlyphs();
   glyphPreviewPanel.glyphs = glyphs;
   glyphPreviewPanel.advanceWidths = getAdvanceWidths();
+  glyphPreviewPanel.fontSize = globalParams.fontsize;
 }
 
 /** Estimate the vertical stroke width @returns { number } */
@@ -159,4 +207,6 @@ window.addEventListener('load', () => {
   $.when(modelPromise, firaPromise).then(updatePreview);
   window.addEventListener('param-change', updatePreview);
   $('#weight-select').on('change', updatePreview);
+  $('#fira-weight-select').on('change', updatePreview);
+  $('#fira-width-select').on('change', updatePreview);
 });

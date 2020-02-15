@@ -59,3 +59,7 @@ body {
 .dual-first .dual-slider:focus,.dual-last .dual-slider:focus {
   background-color: #1E88A8 !important;
 }
+
+.material-tooltip {
+  text-align: left;
+}

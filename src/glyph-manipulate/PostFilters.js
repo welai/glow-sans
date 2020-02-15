@@ -10,7 +10,7 @@ const { mod } = require('../utils/point-math');
  * angleTol: number? }) } config
  * @returns { PostFilter } */
 function removeFeet({ maxStroke = 10, longestFoot = 100, angleTol = 2 } = {}) {
-  return (glyph) =>  glyph.map(contour => {
+  return glyph =>  glyph.map(contour => {
     const [ leftFeet, rightFeet ] = detectFeet(contour, 
       { maxStroke, longestFoot, angleTol });
     return contour.map((pt, i) => {
@@ -32,8 +32,27 @@ function removeFeet({ maxStroke = 10, longestFoot = 100, angleTol = 2 } = {}) {
   });
 }
 
+/** Translation
+ * @param { number } xOffset 
+ * @param { number } yOffset 
+ * @returns { PostFilter } */
+function translation(xOffset, yOffset) {
+  return glyph => glyph.map(contour => contour.map(
+    pt => ({ x: pt.x + xOffset, y: pt.y + yOffset, on: pt.on })));
+}
+
+/** Scaling
+ * @param { number } xRatio 
+ * @param { number } yRatio 
+ * @returns { PostFilter } */
+function scaling(xRatio, yRatio = xRatio) {
+  return glyph => glyph.map(contour => contour.map(
+    pt => ({ x: pt.x * xRatio, y: pt.y * yRatio, on: pt.on })));
+}
+
 /** Merge filters
- * @param  {...PostFilter} filters */
+ * @param  {...PostFilter} filters
+ * @returns { PostFilter } */
 function merge(...filters) {
   if (filters.length === 0) return x => x;
   return filters.reduce((a, b) => (x => b(a(x))));
@@ -41,5 +60,7 @@ function merge(...filters) {
 
 module.exports = {
   removeFeet,
+  translation,
+  scaling,
   merge
 }

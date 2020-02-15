@@ -81,6 +81,18 @@ function soften(factor) {
   }
 }
 
+/** Translation
+ * @param { number } xOffset
+ * @param { number } yOffset
+ * @returns { Filter } */
+function translation(xOffset, yOffset) {
+  return (onRefs, onOffsets, offOffsets) => {
+    const translatedOnRefs = onRefs.map(
+      pt => [ pt[0] + xOffset, pt[1] + yOffset ]);
+    return [ translatedOnRefs, onOffsets, offOffsets ];
+  }
+}
+
 /** Merge the application of the filters
  * @param  {...Filter} filters 
  * @returns { Filter } */
@@ -92,7 +104,6 @@ function merge(...filters) {
   }
 }
 
-
 module.exports = {
   horizontalScale,
   weightAdjustment,
@@ -101,5 +112,6 @@ module.exports = {
   counterScale,
   gravityAdjustment,
   soften,
+  translation,
   merge
 };

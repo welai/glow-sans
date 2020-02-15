@@ -11,8 +11,11 @@
 <body>
   <div id="ops" class="ops scrollable">
     <div class="ops-content">
-      <form>
-        <div class="input-field">
+      <div>
+        <h5 class="tooltipped" style="margin-top:25px;" data-position="right" 
+        data-tooltip="思源黑体汉字部分基本设定，选取调整的字重，设定字体大小。<br>Basics for Source Han Sans, especially the selection for the base weight.">基础</h5>
+        <div class="input-field row tooltipped" style="margin:30px 0;" data-position="right"
+        data-tooltip="选定思源黑体字重，用于后续调整。<br>Select the base weight in Source Han Sans to manipulate.">
           <select id="weight-select">
             <option value="0">ExtraLight</option>
             <option value="1">Light</option>
@@ -24,40 +27,110 @@
           </select>
           <label>字重 Weight</label>
         </div>
-        <label>字重微调 Weight (optical size)</label>
-        <p class="range-field">
-          <input type="range" class="binded" min="0.75" max="1.25" step="0.01" data-bind="weight" />
-        </p>
-        <label>对比 Contrast</label>
-        <p class="range-field">
-          <input type="range" class="binded" min="0.75" max="1.25" step="0.01" data-bind="contrast" />
-        </p>
-        <label>宽窄 Width</label>
-        <p class="range-field">
-          <input type="range" class="binded" min="0.75" max="1.25" step="0.01" data-bind="width" />
-        </p>
-        <label>字面 Tracking</label>
-        <p class="range-field">
-          <input type="range" class="binded" min="0.95" max="1.05" step="0.001" data-bind="tracking" />
-        </p>
-        <label>中宫 Counter</label>
-        <p class="range-field">
-          <input type="range" class="binded" min="0.92" max="1.08" step="0.001" data-bind="counter" />
-        </p>
-        <label>重心 Gravity</label>
-        <p class="range-field">
-          <input type="range" class="binded" min="0.92" max="1.08" step="0.001" data-bind="gravity" />
-        </p>
-        <label>软硬 Softness</label>
-        <p class="range-field">
-          <input type="range" class="binded" min="0.85" max="1.15" step="0.001" data-bind="softness" />
-        </p>
-        <div class="switch">
-          <label>去脚 Feet removal<input class="binded" type="checkbox" data-bind="feetremoval" >
-            <span class="lever" style="float:right;"></span>
-          </label>
+        <div class="row tooltipped" data-position="right" data-tooltip="画布中使用的字体大小。<br>Font size in use for the glyphs on the canvas.">
+          <label>字体大小 Font size</label>
+          <p class="range-field">
+            <input type="range" class="binded" min="20" max="200" step="1" data-bind="fontsize" />
+          </p>
         </div>
-      </form>
+        <h5 class="tooltipped" style="margin-top:25px;" data-position="right" 
+        data-tooltip="对汉字做结构的形态学变形与轮廓修饰。<br>Morphologically manipulate and modify the Han glyph contours.">变形与修饰</h5>
+        <div class="row tooltipped" data-position="right" data-tooltip="对字重（粗度）做机械微调。<br>Fine-tuning the weight mechanically.">
+          <label>字重微调 Weight (optical size)</label>
+          <p class="range-field">
+            <input type="range" class="binded" min="0.75" max="1.25" step="0.01" data-bind="weight" />
+          </p>
+        </div>
+        <div class="row tooltipped" data-position="right" data-tooltip="纵横对比调整。<br>Contrasts for horizontal and vertical strokes.">
+          <label>对比 Contrast</label>
+          <p class="range-field">
+            <input type="range" class="binded" min="0.75" max="1.25" step="0.01" data-bind="contrast" />
+          </p>
+        </div>
+        <div class="row tooltipped" data-position="right" data-tooltip="汉字的宽窄。<br>Width adjustment, more condensed or extended.">
+          <label>宽窄 Width</label>
+          <p class="range-field">
+            <input type="range" class="binded" min="0.75" max="1.25" step="0.01" data-bind="width" />
+          </p>
+        </div>
+        <div class="row tooltipped" data-position="right" data-tooltip="相对字面率设定，改变字面率将改变汉字默认字距。<br>Adjustment for the spacing in the letter faces (has similar visual effect to tracking).">
+          <label>字面 In-face spacing</label>
+          <p class="range-field">
+            <input type="range" class="binded" min="0.95" max="1.05" step="0.001" data-bind="tracking" />
+          </p>
+        </div>
+        <div class="row tooltipped" data-position="right" data-tooltip="结构向内收紧程度，中宫越大内白越多。<br>Zhonggong/douhaba adjustment (has similar visual effect to contour adjustment).">
+          <label>中宫 Counter</label>
+          <p class="range-field">
+            <input type="range" class="binded" min="0.92" max="1.08" step="0.001" data-bind="counter" />
+          </p>
+        </div>
+        <div class="row tooltipped" data-position="right" data-tooltip="字的重心高度。<br>Vertical adjustments for visual gravity.">
+          <label>重心 Gravity</label>
+          <p class="range-field">
+            <input type="range" class="binded" min="0.92" max="1.08" step="0.001" data-bind="gravity" />
+          </p>
+        </div>
+        <div class="row tooltipped" data-position="right" data-tooltip="撇捺曲线软硬程度。<br>Softness of left and right falling strokes.">
+          <label>软硬 Softness</label>
+          <p class="range-field">
+            <input type="range" class="binded" min="0.85" max="1.15" step="0.001" data-bind="softness" />
+          </p>
+        </div>
+        <div class="row tooltipped" data-position="right" data-tooltip="是否去除“口”类部件的装饰脚。<br>Toggling removal of “口”-s’ feet.">
+          <div class="switch">
+            <label>去脚 Feet removal<input class="binded" type="checkbox" data-bind="feetremoval" >
+              <span class="lever" style="float:right;"></span>
+            </label>
+          </div>
+        </div>
+        <h5 class="tooltipped" style="margin-top:25px;" data-position="right" 
+        data-tooltip="字体附属西文配置（来自 Fira Sans）。<br>Adjustments for Latin script matching (glyphs from Fira Sans).">附属西文</h5>
+        <div class="input-field row tooltipped" style="margin:30px 0;" data-position="right" 
+        data-tooltip="选定西文基础字重。<br>Select from weights of Fira Sans to match.">
+          <select id="fira-weight-select">
+            <option value="0">Two</option>
+            <option value="1">Four</option>
+            <option value="2">Eight</option>
+            <option value="3">Hair</option>
+            <option value="4">Thin</option>
+            <option value="5">UltraLight</option>
+            <option value="6">ExtraLight</option>
+            <option value="7">Light</option>
+            <option value="8">Book</option>
+            <option value="9" selected>Regular</option>
+            <option value="10">Medium</option>
+            <option value="11">SemiBold</option>
+            <option value="12">Bold</option>
+            <option value="13">ExtraBold</option>
+            <option value="14">Heavy</option>
+          </select>
+          <label>西文字重 Weight for latin</label>
+        </div>
+        <div class="input-field row tooltipped" style="margin:30px 0;" data-position="right" 
+        data-tooltip="选定西文基础宽度。<br>Select from widths of Fira Sans to match.">
+          <select id="fira-width-select">
+            <option value="0" selected>Normal</option> 
+            <option value="1">Condensed</option> 
+            <option value="2">Compressed</option> 
+          </select>
+          <label>西文宽度 Width for latin</label>
+        </div>
+        <div class="row tooltipped" data-position="right" 
+        data-tooltip="西文基线相对汉字字身下沿高度。<br>CJK baseline matching.">
+          <label>基线 Baseline</label>
+          <p class="range-field">
+            <input type="range" class="binded" min="0" max="200" step="1" data-bind="baseline" />
+          </p>
+        </div>
+        <div class="row tooltipped" data-position="right" 
+        data-tooltip="西文缩放。<br>Scaling Latin script to fit the sizes of CJK glyphs.">
+          <label>缩放 Scale</label>
+          <p class="range-field">
+            <input type="range" class="binded" min="0.8" max="1.2" step="0.01" data-bind="latinscale" />
+          </p>
+        </div>
+      </div>
     </div>
   </div>
   <div class="preview-column">
