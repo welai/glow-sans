@@ -2,22 +2,21 @@
 /** @typedef { ControlPoint[] } Contour */
 /** @typedef { Contour[] } GlyphData */
 /** @typedef { [number, number] PointTuple } */
-const { mod, rad2deg, angle, dist } = require('../utils/point-math');
+const { mod, rad2deg, angle, dist, tuple } = require('../utils/point-math');
 
-/** Test if the four points construct a left foot
+/** Test if the points construct a left foot
  * @param { ControlPoint } pt1 
  * @param { ControlPoint } pt2 
  * @param { ControlPoint } pt3 
  * @param { ControlPoint } pt4 
  * @param { ControlPoint } pt5
  * @param { { maxStroke: number?, longestFoot: number?, 
- * angleTol: number? } } config */
+ * angleTol: number? } } config 
+ * @returns { boolean } */
 function isLeftFoot(pt1, pt2, pt3, pt4, pt5, pt6, pt7, { 
   maxStroke = 10, longestFoot = 50, angleTol = 2
 } = {}) {
   const angleApprox = (a1, a2) => Math.abs(a1-a2) < angleTol;
-  /** @type { ControlPoint => [ number, number ] } */
-  const tuple = (ctrlPt) => [ ctrlPt.x, ctrlPt.y ];
 
   // On-point testing
   if (!pt1.on || !pt2.on || !pt3.on || !pt4.on || !pt5.on) return false;

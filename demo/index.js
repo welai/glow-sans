@@ -1,7 +1,7 @@
 const GlyphPreviewPanel = require('./GlyphPreviewPanel');
 const ModelFilters = require('../src/glyph-manipulate/ModelFilters');
 const PostFilters = require('../src/glyph-manipulate/PostFilters');
-const detectFeet = require('../src/glyph-manipulate/detect-feet');
+const { detectEnds } = require('../src/glyph-manipulate/detect-ends');
 const globalParams = require('./global-params');
 const { res, shsWeights, firaWeights, firaWidths,
   modelPromise, firaPromise } = require('./resources');
@@ -30,7 +30,8 @@ function getCurrentFira() {
 /** Get the glyphs with filters
  * @returns { { x: number, y: number, on: boolean }[][] } */
 function getGlyphs() {
-  const strokeWidth = vStrokeWidth();
+  const vStroke = vStrokeWidth();
+  const hStroke = hStrokeWidth();
   const modelFilter = ModelFilters.merge(
     ModelFilters.horizontalScale(globalParams.width),
     ModelFilters.radialScale(globalParams.tracking),
@@ -40,14 +41,24 @@ function getGlyphs() {
     ModelFilters.contrastAdjustment(globalParams.contrast),
     ModelFilters.soften(globalParams.softness)
   );
+
   const removeFeetFilter = PostFilters.removeFeet(
-    { maxStroke: strokeWidth * 1.5, longestFoot: 110 });
+    { maxStroke: vStroke * 1.5, longestFoot: 110 });
+  const strokeEndFilter = PostFilters.strokeEndsFlatten(
+    globalParams.flattenends, globalParams.endsremoval, 
+    { maxStroke: hStroke * 1.5 });
+  const softenDotFilter = PostFilters.softenDots(
+    globalParams.dotsoftness, { maxStroke: hStroke * 1.5 });
   const postFilterList = [];
   if (globalParams.feetremoval) postFilterList.push(removeFeetFilter);
+  postFilterList.push(strokeEndFilter);
+  postFilterList.push(softenDotFilter);
   const postFilter = PostFilters.merge(...postFilterList);
+
   const latinPostFilter = PostFilters.merge(
     PostFilters.translation(0, globalParams.baseline),
     PostFilters.scaling(globalParams.latinscale));
+
   const currentModels = getCurrentModels();
   const glyphs = [];
 
@@ -89,9 +100,23 @@ function getAdvanceWidths() {
 function updatePreview() {
   if ($.when(modelPromise, firaPromise).state() !== 'resolved') return;
   const glyphs = getGlyphs();
-  glyphPreviewPanel.glyphs = glyphs;
-  glyphPreviewPanel.advanceWidths = getAdvanceWidths();
+  glyphPreviewPanel._glyphs = glyphs;
+  glyphPreviewPanel._advanceWidths = getAdvanceWidths();
   glyphPreviewPanel.fontSize = globalParams.fontsize;
+  // glyphPreviewPanel.highlights = getKeypoints(glyphs);
+}
+
+/** Estimate the horizontal stroke width @returns { number } */
+function hStrokeWidth() {
+  const selector = $('#weight-select');
+  const yiGm = res.glyphModels[selector.val()]['uni2F00'];
+  if (!yiGm) 
+    throw Error('The character uni2F00 must be included in the glyph models.');
+  const yiGlyph = yiGm.restore(
+    ModelFilters.weightAdjustment(globalParams.weight)
+  );
+  const hStrokeWidth = (yiGlyph[0][0].y - yiGlyph[0][1].y)*0.8;
+  return hStrokeWidth;
 }
 
 /** Estimate the vertical stroke width @returns { number } */
@@ -114,12 +139,10 @@ function vStrokeWidth() {
 function getKeypoints(glyphs) {
   /** @type { [ number, number, number ] } */
   const keypoints = [];
-  const strokeWidth = vStrokeWidth();
+  const strokeWidth = hStrokeWidth();
   glyphs.forEach((glyph, gi) => glyph.forEach((contour, ci) => {
-    const [ leftFeet, rightFeet ] = detectFeet(
-      contour, { maxStroke: strokeWidth * 1.5, longestFoot: 110 });
-    leftFeet.forEach(pi => keypoints.push([gi, ci, pi]));
-    rightFeet.forEach(pi => keypoints.push([gi, ci, pi]));
+    const ends = detectEnds(contour, { maxStroke: strokeWidth * 1.5 });
+    ends.forEach(pi => keypoints.push([gi, ci, pi]))
   }));
   return keypoints;
 }

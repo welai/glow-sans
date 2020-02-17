@@ -8,7 +8,10 @@ const globalParams = window.globalParams = {
   counter: 1.0,
   gravity: 1.0,
   softness: 1.0,
+  dotsoftness: 1.0,
   feetremoval: false,
+  endsremoval: false,
+  flattenends: 0.0,
   baseline: 100,
   latinscale: 1.0
 };

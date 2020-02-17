@@ -78,12 +78,31 @@
             <input type="range" class="binded" min="0.85" max="1.15" step="0.001" data-bind="softness" />
           </p>
         </div>
+        <div class="row tooltipped" data-position="right" data-tooltip="点画软硬程度。<br>Softness of dot strokes.">
+          <label>点软硬 Softness of dots</label>
+          <p class="range-field">
+            <input type="range" class="binded" min="0" max="2" step="0.01" data-bind="dotsoftness" />
+          </p>
+        </div>
         <div class="row tooltipped" data-position="right" data-tooltip="是否去除“口”类部件的装饰脚。<br>Toggling removal of “口”-s’ feet.">
           <div class="switch">
             <label>去脚 Feet removal<input class="binded" type="checkbox" data-bind="feetremoval" >
               <span class="lever" style="float:right;"></span>
             </label>
           </div>
+        </div>
+        <div class="row tooltipped" data-position="right" data-tooltip="是否去除撇捺勾末端的喇叭口。<br>Toggling removal of curved stroke opennings.">
+          <div class="switch">
+            <label>去喇叭口凹进 Flat stroke opennings<input class="binded" type="checkbox" data-bind="endsremoval" >
+              <span class="lever" style="float:right;"></span>
+            </label>
+          </div>
+        </div>
+        <div class="row tooltipped" data-position="right" data-tooltip="撇捺勾末端平直程度。<br>Flatten ends of the falling strokes and the hooks.">
+          <label>笔末平直化 Flatten stroke ends</label>
+          <p class="range-field">
+            <input type="range" class="binded" min="-1" max="1" step="0.01" data-bind="flattenends" />
+          </p>
         </div>
         <h5 class="tooltipped" style="margin-top:25px;" data-position="right" 
         data-tooltip="字体附属西文配置（来自 Fira Sans）。<br>Adjustments for Latin script matching (glyphs from Fira Sans).">附属西文</h5>
