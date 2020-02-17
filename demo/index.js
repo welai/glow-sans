@@ -139,10 +139,6 @@ function loadSaved(savedObject) {
   const firaval = savedObject.fira;
   if (firaval !== undefined) {
     const firaWeight = Math.floor(firaval/3), firaWidth = firaval%3;
-<<<<<<< HEAD:demo/index.js
-=======
-    console.log(firaWeight);
->>>>>>> Massive refactoring and saving added:demo/index.js
     if (firaWeight in firaWeights) {
       const select = $('#fira-weight-select');
       select.val('' + firaWeight);
@@ -163,13 +159,8 @@ function loadSaved(savedObject) {
 function getSavingObject() {
   const object = JSON.parse(JSON.stringify(globalParams));
   object.shs = parseInt($('#weight-select').val());
-<<<<<<< HEAD:demo/index.js
-  object.fira = parseInt($('#fira-weight-select').val() * 3 
-    + $('#fira-width-select').val());
-=======
   object.fira = parseInt($('#fira-weight-select').val()) * 3 
     + parseInt($('#fira-width-select').val());
->>>>>>> Massive refactoring and saving added:demo/index.js
   return object;
 }
 
