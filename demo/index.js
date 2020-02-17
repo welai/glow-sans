@@ -34,7 +34,7 @@ function getGlyphs() {
   const hStroke = hStrokeWidth();
   const modelFilter = ModelFilters.merge(
     ModelFilters.horizontalScale(globalParams.width),
-    ModelFilters.radialScale(globalParams.tracking),
+    ModelFilters.radialScale(globalParams.xtracking, globalParams.ytracking),
     ModelFilters.counterScale(globalParams.counter),
     ModelFilters.gravityAdjustment(globalParams.gravity),
     ModelFilters.weightAdjustment(globalParams.weight),

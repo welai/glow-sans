@@ -34,12 +34,13 @@ function contrastAdjustment(factor) {
 }
 
 /** Radial scaling for tracking adjustment
- * @param { number } factor Radial scaling factor 
+ * @param { number } xfactor Radial scaling factor for x axis 
+ * @param { number } yfactor Radial scaling factor for y axis 
  * @returns { Filter } */
-function radialScale(factor) {
+function radialScale(xfactor, yfactor = xfactor) {
   return (onRefs, onOffsets, offOffsets) => {
     const scaledOnRefs = onRefs.map(pt => 
-      [ (pt[0] - 500) * factor + 500, (pt[1] - 500) * factor + 500 ]);
+      [ (pt[0] - 500) * xfactor + 500, (pt[1] - 500) * yfactor + 500 ]);
     return [ scaledOnRefs, onOffsets, offOffsets ];
   }
 }
