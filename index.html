@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <title>Glow Sans demo</title>
 </head>
@@ -129,6 +130,15 @@
           <p class="range-field">
             <input type="range" class="binded" min="0.8" max="1.2" step="0.01" data-bind="latinscale" />
           </p>
+        </div>
+        <h5 class="tooltipped" style="margin-top:25px;" data-position="right" 
+        data-tooltip="保存以及载入设定。<br>Save or load adjustments.">保存</h5>
+        <div style="text-align:center;">
+          <a class="save-btn waves-effect waves-dark white black-text btn" href="javascript:copyLink()"><i class="material-icons left">link</i>复制连接 copy link</a>
+          <input type="hidden" name="link-copying" id="link-copying">
+          <a class="save-btn waves-effect waves-dark white black-text btn" href="javascript:$('#input-file').click()"><i class="material-icons left">file_upload</i>载入 load</a>
+          <input type="file" name="input-file" id="input-file" accept="application/json" style="display:none">
+          <a class="save-btn waves-effect waves-light btn" href="javascript:saveJSON()"><i class="material-icons left">save</i>保存 save</a>
         </div>
       </div>
     </div>

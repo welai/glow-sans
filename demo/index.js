@@ -1,86 +1,11 @@
-const GlyphModel = require('../src/glyph-manipulate/GlyphModel');
-const GlyphPreviewPanel = require('../src/utils/GlyphPreviewPanel');
+const GlyphPreviewPanel = require('./GlyphPreviewPanel');
 const ModelFilters = require('../src/glyph-manipulate/ModelFilters');
 const PostFilters = require('../src/glyph-manipulate/PostFilters');
 const detectFeet = require('../src/glyph-manipulate/detect-feet');
-
-// The parameters manipulatable by the UI elements
-const globalParams = window.globalParams = {
-  fontsize: 100,
-  width: 1.0,
-  weight: 1.0,
-  contrast: 1.0,
-  tracking: 1.0,
-  counter: 1.0,
-  gravity: 1.0,
-  softness: 1.0,
-  feetremoval: false,
-  baseline: 100,
-  latinscale: 1.0
-};
-/** Bind the UI to globalParams */
-globalParams.bindUI = function () {
-  $('.binded').each((index, elem) => {
-    const param = elem.getAttribute('data-bind');
-    $(elem).on('input', () => {
-      if (elem.type === 'range') this[param] = Number.parseFloat(elem.value);
-      if (elem.type === 'checkbox') this[param] = elem.checked;
-      const event = new CustomEvent('param-change', { detail: param });
-      window.dispatchEvent(event);
-    });
-    if (elem.type === 'range') $(elem).val(this[param]);
-    if (elem.type === 'checkbox') elem.checked = globalParams.feetremoval;
-  });
-}
-
-// SHSans glyph model data
-/** Available weights */
-const shsWeights = [ 'ExtraLight', 'Light', 'Normal', 'Regular', 
-  'Medium', 'Bold', 'Heavy' ];
-/** Paths of the glyph models */
-const modelFilenames = shsWeights.map(
-  w => `samples/SourceHanSansSC-${w}.model.json`);
-/** Available Fira weights */
-const firaWeights = [ 'Two', 'Four', 'Eight', 'Hair', 'Thin', 'UltraLight',
-'ExtraLight', 'Light', 'Book', 'Regular', 'Medium', 'SemiBold', 'Bold',
-'ExtraBold', 'Heavy' ];
-/** Available Fira widths */
-const firaWidths = [ 'Normal', 'Condensed', 'Compressed' ];
-/** Paths of the fira samples */
-const firaFilenames = [];
-firaWeights.forEach(w => firaFilenames.push(
-  `samples/FiraSans-${w}.json`,
-  `samples/FiraSansCondensed-${w}.json`,
-  `samples/FiraSansCompressed-${w}.json`
-));
-
-/** SHSans glyph models. 
- * @type { { [key: string]: GlyphModel }[] } */
-var glyphModels;
-/** Promise for all model download */
-const modelPromise = $.when(...modelFilenames.map(path => $.get(path)))
-  .then((...resArr) => {
-    glyphModels = resArr.map(res=> {
-      const gmDict = res[0];
-      const chars = Object.keys(gmDict);
-      const models = Object.values(gmDict)
-        .map(modelObj => new GlyphModel(modelObj));
-      const result = {};
-      for (let i in chars) result[chars[i]] = models[i];
-      return result;
-    });
-  }).catch(reason => {
-    console.error(reason);
-  });
-
-  /** Fira font samples 
- * @typedef { { x: number, y: number, on: boolean }[][] } GlyphData
- * @type { {[key: string]: { advanceWidth: number, contours: GlyphData }}[] } */
-var firaSamples;
-const firaPromise = $.when(...firaFilenames.map(path => $.get(path)))
-  .then((...resArr) => {
-    firaSamples = resArr.map(res => res[0]);
-  });
+const globalParams = require('./global-params');
+const { res, shsWeights, firaWeights, firaWidths,
+  modelPromise, firaPromise } = require('./resources');
+const { encodeParams, decodeParams } = require('./url-param');
 
 /** Sample text */
 const sampelText = '⼀三五⽔永过東南明湖区匪国國酬爱愛袋鸢鳶鬱靈鷹曌龘 Height 012369';
@@ -90,7 +15,7 @@ function getCurrentModels() {
   const selector = $('#weight-select');
   const keys = sampelText.split('').map(
     char => 'uni' + char.charCodeAt(0).toString(16).toUpperCase());
-  const modelDict = glyphModels[selector.val()];
+  const modelDict = res.glyphModels[selector.val()];
   return keys.map(key => modelDict[key]);
 }
 /** Get current fira glyphs
@@ -99,7 +24,7 @@ function getCurrentFira() {
   const firaWeight = $('#fira-weight-select').val();
   const firaWidth = $('#fira-width-select').val();
   const index = parseInt(firaWeight) * 3 + parseInt(firaWidth);
-  return firaSamples[index];
+  return res.firaSamples[index];
 }
 
 /** Get the glyphs with filters
@@ -123,10 +48,10 @@ function getGlyphs() {
   const latinPostFilter = PostFilters.merge(
     PostFilters.translation(0, globalParams.baseline),
     PostFilters.scaling(globalParams.latinscale));
-  const glyphModels = getCurrentModels();
+  const currentModels = getCurrentModels();
   const glyphs = [];
 
-  glyphModels.forEach((model, i) => {
+  currentModels.forEach((model, i) => {
     if (model === undefined) {
       const char = sampelText[i]
       const currentFira = getCurrentFira();
@@ -145,9 +70,9 @@ function getGlyphs() {
 }
 function getAdvanceWidths() {
   const advanceWidths = [];
-  const glyphModels = getCurrentModels();
+  const currentModels = getCurrentModels();
 
-  glyphModels.forEach((model, i) => {
+  currentModels.forEach((model, i) => {
     if (model !== undefined) { 
       advanceWidths.push(1000 * globalParams.width); return;
     }
@@ -162,6 +87,7 @@ function getAdvanceWidths() {
   return advanceWidths;
 }
 function updatePreview() {
+  if ($.when(modelPromise, firaPromise).state() !== 'resolved') return;
   const glyphs = getGlyphs();
   glyphPreviewPanel.glyphs = glyphs;
   glyphPreviewPanel.advanceWidths = getAdvanceWidths();
@@ -171,7 +97,7 @@ function updatePreview() {
 /** Estimate the vertical stroke width @returns { number } */
 function vStrokeWidth() {
   const selector = $('#weight-select');
-  const yiGm = glyphModels[selector.val()]['uni2F00'];
+  const yiGm = res.glyphModels[selector.val()]['uni2F00'];
   if (!yiGm) 
     throw Error('The character uni2F00 must be included in the glyph models.');
   const yiGlyph = yiGm.restore(
@@ -198,15 +124,113 @@ function getKeypoints(glyphs) {
   return keypoints;
 }
 
+/** Load saved object
+ * @param { { [key: string]: boolean|number } } savedObject */
+function loadSaved(savedObject) {
+  for (const param in savedObject) {
+    if (param in globalParams) globalParams[param] = savedObject[param];
+  }
+  const shsval = savedObject.shs;
+  if (shsval !== undefined && shsval in shsWeights) {
+    const select = $('#weight-select');
+    select.val('' + shsval);
+    try { select[0].M_FormSelect._setValueToInput(); } catch (error) { }
+  }
+  const firaval = savedObject.fira;
+  if (firaval !== undefined) {
+    const firaWeight = Math.floor(firaval/3), firaWidth = firaval%3;
+<<<<<<< HEAD:demo/index.js
+=======
+    console.log(firaWeight);
+>>>>>>> Massive refactoring and saving added:demo/index.js
+    if (firaWeight in firaWeights) {
+      const select = $('#fira-weight-select');
+      select.val('' + firaWeight);
+      try { select[0].M_FormSelect._setValueToInput(); } catch (error) { }
+    }
+    if (firaWidth in firaWidths) {
+      const select = $('#fira-width-select');
+      select.val('' + firaWidth);
+      try { select[0].M_FormSelect._setValueToInput(); } catch (error) { }
+    }
+  }
+  globalParams.bindUI();
+  updatePreview();
+}
+
+/** Get the object to save.
+ * @returns { { [key: string]: boolean|number } } */
+function getSavingObject() {
+  const object = JSON.parse(JSON.stringify(globalParams));
+  object.shs = parseInt($('#weight-select').val());
+<<<<<<< HEAD:demo/index.js
+  object.fira = parseInt($('#fira-weight-select').val() * 3 
+    + $('#fira-width-select').val());
+=======
+  object.fira = parseInt($('#fira-weight-select').val()) * 3 
+    + parseInt($('#fira-width-select').val());
+>>>>>>> Massive refactoring and saving added:demo/index.js
+  return object;
+}
+
+/** Triggered when clicking the save buttom. */
+window.saveJSON = function saveJSON() {
+  var toSave = JSON.stringify(getSavingObject());
+  var blob = new Blob([ toSave ], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.download = 'saved.json';
+  a.href = URL.createObjectURL(blob);
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  a.remove();
+}
+
+window.copyLink = function copyLink() {
+  const toSave = getSavingObject();
+  const link = location.origin + location.pathname + '#' + encodeParams(toSave);
+  $('#link-copying')[0].type = 'text';
+  $('#link-copying').val(link);
+  $('#link-copying').select();
+  document.execCommand('copy');
+  $('#link-copying')[0].type = 'hidden';
+  M.toast({ html: '已复制链接到剪贴板。<br>Link copied to clipboard.' });
+}
+
+$('#input-file').change(() => {
+  const file = document.getElementById('input-file').files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const contents = e.target.result;
+    try {
+      const settings = JSON.parse(contents);
+      loadSaved(settings);
+    } catch (e) {
+      M.toast({ html: '无法解析文件。<br>File import failed.' });
+    }
+  }
+  reader.readAsText(file);
+});
+
+$(window).on('hashchange', () => {
+  const decodedParams = decodeParams(location.hash);
+  loadSaved(decodedParams);
+  location.hash = '';
+});
+
 // Initialization
 window.addEventListener('load', () => {
   const glyphPreviewPanel = window.glyphPreviewPanel =
     new GlyphPreviewPanel('preview');
-  window.globalParams.bindUI();
+  glyphPreviewPanel.lineHeight = 1.25;
+  const decodedParams = decodeParams(location.hash);
+  loadSaved(decodedParams);
+  location.hash = '';
   // Update preview
   $.when(modelPromise, firaPromise).then(updatePreview);
   window.addEventListener('param-change', updatePreview);
-  $('#weight-select').on('change', updatePreview);
-  $('#fira-weight-select').on('change', updatePreview);
-  $('#fira-width-select').on('change', updatePreview);
+  $('#weight-select').change(updatePreview);
+  $('#fira-weight-select').change(updatePreview);
+  $('#fira-width-select').change(updatePreview);
 });

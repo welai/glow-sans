@@ -63,3 +63,8 @@ body {
 .material-tooltip {
   text-align: left;
 }
+
+.save-btn {
+  width: 250px;
+  margin: 5px;
+}
