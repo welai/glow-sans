@@ -3,8 +3,8 @@ const ModelFilters = require('../src/glyph-manipulate/ModelFilters');
 const PostFilters = require('../src/glyph-manipulate/PostFilters');
 const { detectEnds } = require('../src/glyph-manipulate/detect-ends');
 const globalParams = require('./global-params');
-const { res, shsWeights, firaWeights, firaWidths,
-  modelPromise, firaPromise } = require('./resources');
+const { res, shsWeights, firaWeights, firaWidths, ralewayWeights,
+  modelPromise, firaPromise, ralewayPromise } = require('./resources');
 const { encodeParams, decodeParams } = require('./url-param');
 
 /** Sample text */
@@ -18,13 +18,22 @@ function getCurrentModels() {
   const modelDict = res.glyphModels[selector.val()];
   return keys.map(key => modelDict[key]);
 }
+
+/** @type { boolean } If using FiraSans or not */
+var useFira = true;
 /** Get current fira glyphs
  * @returns {{[key: string]: { advanceWidth: number, contours: GlyphData }}} */
-function getCurrentFira() {
-  const firaWeight = $('#fira-weight-select').val();
-  const firaWidth = $('#fira-width-select').val();
-  const index = parseInt(firaWeight) * 3 + parseInt(firaWidth);
-  return res.firaSamples[index];
+function getCurrentLatin() {
+  if (useFira) {
+    const firaWeight = $('#fira-weight-select').val();
+    const firaWidth = $('#fira-width-select').val();
+    const index = parseInt(firaWeight) * 3 + parseInt(firaWidth);
+    return res.firaSamples[index];
+  } else {
+    const ralewayWeight = $('#raleway-weight-select').val();
+    const index = parseInt(ralewayWeight);
+    return res.ralewaySamples[index];
+  }
 }
 
 /** Get the glyphs with filters
@@ -65,7 +74,7 @@ function getGlyphs() {
   currentModels.forEach((model, i) => {
     if (model === undefined) {
       const char = sampelText[i]
-      const currentFira = getCurrentFira();
+      const currentFira = getCurrentLatin();
       if (char === ' ') { glyphs.push([]); return; }
       if (!(char in currentFira)) {
         console.warn(`"${char}" is not found in glyph data.`);
@@ -87,7 +96,7 @@ function getAdvanceWidths() {
     if (model !== undefined) { 
       advanceWidths.push(1000 * globalParams.width); return;
     }
-    const char = sampelText[i], currentFira = getCurrentFira();
+    const char = sampelText[i], currentFira = getCurrentLatin();
     if (char === ' ')
       advanceWidths.push(300);
     else if (char in currentFira) {
@@ -173,6 +182,16 @@ function loadSaved(savedObject) {
       try { select[0].M_FormSelect._setValueToInput(); } catch (error) { }
     }
   }
+  const ralewayval = savedObject.raleway;
+  if (ralewayval !== undefined) {
+    if (ralewayval in ralewayWeights) {
+      const select = $('#raleway-weight-select');
+      select.val('' + ralewayval);
+      try { select[0].M_FormSelect._setValueToInput(); } catch (error) { }
+    }
+    useFira = false;
+    document.getElementById('raleway-radio').checked = true;
+  }
   globalParams.bindUI();
   updatePreview();
 }
@@ -182,8 +201,12 @@ function loadSaved(savedObject) {
 function getSavingObject() {
   const object = JSON.parse(JSON.stringify(globalParams));
   object.shs = parseInt($('#weight-select').val());
-  object.fira = parseInt($('#fira-weight-select').val()) * 3 
-    + parseInt($('#fira-width-select').val());
+  if (useFira) {
+    object.fira = parseInt($('#fira-weight-select').val()) * 3 
+      + parseInt($('#fira-width-select').val());
+  } else {
+    object.raleway = parseInt($('#raleway-weight-select').val());
+  }
   return object;
 }
 
@@ -209,6 +232,22 @@ window.copyLink = function copyLink() {
   document.execCommand('copy');
   $('#link-copying')[0].type = 'hidden';
   M.toast({ html: '已复制链接到剪贴板。<br>Link copied to clipboard.' });
+}
+
+window.toggleLatin = function toggleLatin(current) {
+  if (current === 'fira' && !useFira) {
+    useFira = true;
+    $('#fira-weight-div').show();
+    $('#fira-width-div').show(200);
+    $('#raleway-weight-div').hide();
+  }
+  else if (current === 'raleway' && useFira) {
+    useFira = false;
+    $('#fira-weight-div').hide();
+    $('#fira-width-div').hide(200);
+    $('#raleway-weight-div').show();
+  }
+  updatePreview();
 }
 
 $('#input-file').change(() => {
@@ -242,9 +281,10 @@ window.addEventListener('load', () => {
   loadSaved(decodedParams);
   location.hash = '';
   // Update preview
-  $.when(modelPromise, firaPromise).then(updatePreview);
+  $.when(modelPromise, firaPromise, ralewayPromise).then(updatePreview);
   window.addEventListener('param-change', updatePreview);
   $('#weight-select').change(updatePreview);
   $('#fira-weight-select').change(updatePreview);
   $('#fira-width-select').change(updatePreview);
+  $('#raleway-weight-select').change(updatePreview);
 });

@@ -1,5 +1,6 @@
 node_modules
 **/playground.*
+fonts/*.json
 fonts/*/*.otf
 fonts/*/*.json
 fonts/*/*.txt

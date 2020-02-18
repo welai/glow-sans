@@ -8,9 +8,12 @@ const sampleText = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwx
 const sampleEntries = sampleText.split('')
   .map(char => {
     const uni = 'U+' + char.charCodeAt(0).toString(16).padStart(4, '0').toUpperCase();
-    const gid = font.cmap[uni];
+    let gid = font.cmap[uni];
+    if (char >= '0' && char <= '9') gid = 'glyph' + (726 + parseInt(char));
     const glyphData = font.glyf[gid];
-    return { [char]: glyphData };
+    return { [char]: { 
+      advanceWidth: glyphData.advanceWidth, contours: glyphData.contours
+    } };
   });
 
 const sample = Object.assign({}, ...sampleEntries);

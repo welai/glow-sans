@@ -84,6 +84,21 @@ WGET https://raw.githubusercontent.com/bBoxType/FiraSans/master/Fira_Sans_4_3/Fo
 wait
 cd ..
 
+mkdir Raleway
+cd Raleway
+WGET https://raw.githubusercontent.com/impallari/Raleway/master/fonts/v4020/Raleway-v4020-Thin.otf &
+WGET https://raw.githubusercontent.com/impallari/Raleway/master/fonts/v4020/Raleway-v4020-ExtraLight.otf &
+WGET https://raw.githubusercontent.com/impallari/Raleway/master/fonts/v4020/Raleway-v4020-Light.otf &
+WGET https://raw.githubusercontent.com/impallari/Raleway/master/fonts/v4020/Raleway-v4020-Regular.otf &
+WGET https://raw.githubusercontent.com/impallari/Raleway/master/fonts/v4020/Raleway-v4020-Medium.otf &
+wait
+WGET https://raw.githubusercontent.com/impallari/Raleway/master/fonts/v4020/Raleway-v4020-SemiBold.otf &
+WGET https://raw.githubusercontent.com/impallari/Raleway/master/fonts/v4020/Raleway-v4020-Bold.otf &
+WGET https://raw.githubusercontent.com/impallari/Raleway/master/fonts/v4020/Raleway-v4020-ExtraBold.otf &
+WGET https://raw.githubusercontent.com/impallari/Raleway/master/fonts/v4020/Raleway-v4020-Black.otf &
+wait
+cd ..
+
 for FILE in */*.otf; do
   echo otfccdump $FILE
   otfccdump $FILE --pretty --ignore-hints --ignore-glyph-order --hex-cmap -o ${FILE//.otf/.json}

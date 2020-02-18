@@ -6,10 +6,11 @@
   "gypfile": true,
   "scripts": {
     "build-demo": "browserify demo/index.js -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/proposal-class-properties ] ] | uglifyjs -o dist/index.js",
-    "dump-fonts": "for FILE in fonts/*/*.otf; do otfccdump $FILE --pretty --ignore-hints --ignore-glyph-order --hex-cmap -o ${FILE//.otf/.json}; done",
+    "dump-fonts": "for FILE in fonts/*/*.otf; do otfccdump $FILE --pretty --ignore-glyph-order --hex-cmap -o ${FILE//.otf/.json}; done",
     "init-fonts": "cd fonts && bash init.sh",
     "sample-shs-sc": "for FILE in fonts/SourceHanSansSC/SourceHanSansSC-*.json; do node scripts/sample.js $FILE ${FILE//'fonts/SourceHanSansSC'/'samples'}; done",
-    "sample-fira": "for FILE in fonts/Fira/FiraSans*.json; do node scripts/sample-latin.js $FILE ${FILE//'fonts/Fira'/'samples'}; done",
+    "sample-fira": "for FILE in fonts/Fira/FiraSans*.json; do node scripts/sample-fira.js $FILE ${FILE//'fonts/Fira'/'samples'}; done",
+    "sample-raleway": "for FILE in fonts/Raleway/Raleway-v4020-*.json; do node scripts/sample-raleway.js $FILE ${FILE//'fonts/Raleway'/'samples'}; done",
     "samples2model": "for FILE in samples/*.json; do python -m scripts.glyph_model_convert $FILE ${FILE//.json/.model.json}; done",
     "serve": "node scripts/serve-static.js"
   },
