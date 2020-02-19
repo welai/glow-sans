@@ -285,56 +285,82 @@ for (const rangeName in codeRanges) {
   }
 }
 
-/** Code range name of a charcode, return undefined if the corresponding range 
+/** Code range name of a unicode, return undefined if the corresponding range 
  * is undefined
- * @param { number } code Charcode in number 
+ * @param { number } unicode Character code in number 
  * @returns { string | undefined } */
-function codeBlockName(code) {
-  if (code > 0x2FA1F) {
-    if (code >= 0xE0000 && code <= 0xE007F) return 'Tags';
-    if (code >= 0xE0100 && code <= 0xE01EF) return 'Variation Selectors Supplement';
-    if (code >= 0xF0000 && code <= 0xFFFFF) return 'Supplementary Private Use Area-A';
-    if (code >= 0x100000 && code <= 0x10FFFF) return 'Supplementary Private Use Area-B';
+function codeBlockName(unicode) {
+  if (unicode > 0x2FA1F) {
+    if (unicode >= 0xE0000 && unicode <= 0xE007F) return 'Tags';
+    if (unicode >= 0xE0100 && unicode <= 0xE01EF) return 'Variation Selectors Supplement';
+    if (unicode >= 0xF0000 && unicode <= 0xFFFFF) return 'Supplementary Private Use Area-A';
+    if (unicode >= 0x100000 && unicode <= 0x10FFFF) return 'Supplementary Private Use Area-B';
     return undefined;
   }
-  const candidates = codeRangeIndex[Math.floor(code/0x100)];
+  const candidates = codeRangeIndex[Math.floor(unicode/0x100)];
   if (candidates === undefined) return undefined;
   for (const name in candidates) {
     const [ lower, upper ] = candidates[name];
-    if (code >= lower && code <= upper) return name;
+    if (unicode >= lower && unicode <= upper) return name;
   }
   return undefined;
 }
 
 /** Check if the code point is in the block
- * @param { number } charcode Charcode
+ * @param { number } unicode Unicode
  * @param { string | undefined } blockname Name of the code block
  * @returns { boolean } */
-function codeInBlock(charcode, blockname) {
+function codeInBlock(unicode, blockname) {
   const [ lower, upper ] = codeRange(blockname) || [ -1, -1 ];
-  return charcode >= lower && charcode <= upper;
+  return unicode >= lower && unicode <= upper;
 }
 
 /** Check if the character code is a Han character
- * @param { number } charcode 
+ * @param { number } unicode 
  * @returns { boolean } */
-function isHan(charcode) {
-  return  codeInBlock(charcode, 'CJK Radicals Supplement') 
-      ||  codeInBlock(charcode, 'Kangxi Radicals')
-      ||  codeInBlock(charcode, 'CJK Strokes')
-      ||  codeInBlock(charcode, 'CJK Compatibility')
-      ||  codeInBlock(charcode, 'CJK Unified Ideographs Extension A')
-      ||  codeInBlock(charcode, 'CJK Unified Ideographs')
-      ||  codeInBlock(charcode, 'CJK Compatibility Ideographs')
-      ||  codeInBlock(charcode, 'CJK Unified Ideographs Extension B')
-      ||  codeInBlock(charcode, 'CJK Unified Ideographs Extension C')
-      ||  codeInBlock(charcode, 'CJK Unified Ideographs Extension D')
-      ||  codeInBlock(charcode, 'CJK Unified Ideographs Extension E');
+function isHan(unicode) {
+  return  codeInBlock(unicode, 'CJK Radicals Supplement') 
+      ||  codeInBlock(unicode, 'Kangxi Radicals')
+      ||  codeInBlock(unicode, 'CJK Strokes')
+      ||  codeInBlock(unicode, 'CJK Unified Ideographs Extension A')
+      ||  codeInBlock(unicode, 'CJK Unified Ideographs')
+      ||  codeInBlock(unicode, 'CJK Compatibility Ideographs')
+      ||  codeInBlock(unicode, 'CJK Unified Ideographs Extension B')
+      ||  codeInBlock(unicode, 'CJK Unified Ideographs Extension C')
+      ||  codeInBlock(unicode, 'CJK Unified Ideographs Extension D')
+      ||  codeInBlock(unicode, 'CJK Unified Ideographs Extension E');
+}
+
+/** Convert Unicode to UTF-16 encoding that JavaScript use for charcodes
+ * @param { number } unicode 
+ * @return { number[] } */
+function toUTF16(unicode) {
+  if (unicode >= 0x000000 && unicode <= 0x00ffff) return [ unicode ];
+  if (unicode <= 0x10ffff) {
+    const c = unicode - 0x10000;
+    const high = Math.floor(c/0x400) + 0xD800;
+    const low = c%0x400 + 0xDC00;
+    return [ high, low ];
+  }
+  throw Error(`Cannot convert ${unicode} to UTF-16`);
+}
+
+/** Convert UTF16 string to Unicode
+ * @param { string } str  
+ * @returns { number } */
+function fromUTF16String(str) {
+  if (!str) return NaN;
+  const high = str.charCodeAt(0);
+  if (Math.floor(high/0x400) !== 0x36) return high;
+  const low = str.charCodeAt(1);
+  return (high - 0xD800) * 0x400 + (low - 0xDC00) + 0x10000;
 }
 
 module.exports = {
   codeBlockName,
   codeInBlock,
   codeRange,
-  isHan
+  isHan,
+  toUTF16,
+  fromUTF16String
 }

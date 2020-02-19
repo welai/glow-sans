@@ -159,6 +159,13 @@ function scaling(xRatio, yRatio = xRatio) {
     pt => ({ x: pt.x * xRatio, y: pt.y * yRatio, on: pt.on })));
 }
 
+/** Round
+ * @returns { PostFilter } */
+function round() {
+  return glyph => glyph.map(contour => contour.map(
+    pt => ({ x: Math.round(pt.x), y: Math.round(pt.y), on: pt.on })));
+}
+
 /** Merge filters
  * @param  {...PostFilter} filters
  * @returns { PostFilter } */
@@ -173,5 +180,6 @@ module.exports = {
   strokeEndsFlatten,
   scaling,
   softenDots,
+  round,
   merge,
 }

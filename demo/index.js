@@ -139,7 +139,7 @@ function vStrokeWidth() {
   );
   const hStrokeWidth = (yiGlyph[0][0].y - yiGlyph[0][1].y)*0.8;
   const contrast = globalParams.contrast;
-  return hStrokeWidth/(2-contrast)*contrast;
+  return hStrokeWidth/(2-contrast)*contrast*1.2;
 }
 
 /** TODO: This is temporary
@@ -207,6 +207,8 @@ function getSavingObject() {
   } else {
     object.raleway = parseInt($('#raleway-weight-select').val());
   }
+  object.hstroke = hStrokeWidth();
+  object.vstroke = vStrokeWidth();
   return object;
 }
 

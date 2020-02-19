@@ -6,6 +6,8 @@ fonts/*/*.json
 fonts/*/*.txt
 fonts/*.zip
 dump/*.json
+working
+build-files/*/*.json
 
 __pycache__
 
