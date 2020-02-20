@@ -7,31 +7,187 @@ const detectEnds = require('./detect-ends');
 const { add, angle, dist, mod, mul, projection, rad2deg, tuple } 
   = require('../utils/point-math');
 
+/** Feet lengths
+ * @param { Contour } contour 
+ * @param { number[] } leftFeet 
+ * @param { number[] } rightFeet 
+ * @returns { [ number[], number[] ] } */
+function feetLengths(contour, leftFeet, rightFeet) {
+  return [
+    leftFeet.map(index => {
+      const pt2 = contour[index];
+      const pt4 = contour[mod(index+2, contour.length)];
+      return pt4.y - pt2.y;
+    }),
+    rightFeet.map(index => {
+      const pt2 = contour[index];
+      const pt4 = contour[mod(index-2, contour.length)];
+      return pt4.y - pt2.y;
+    })
+  ];
+}
+
+/** Remove feet of a single contour
+ * @param { Contour } contour 
+ * @param { number[] } leftFeet 
+ * @param { number[] } rightFeet 
+ * @returns { Contour } */
+function removeContourFeet(contour, leftFeet, rightFeet) {
+  return contour.map((pt, i) => {
+    if (leftFeet.indexOf(i) >= 0) {
+      const pt3 = contour[mod(i+2, contour.length)];
+      return { x: pt.x, y: pt3.y, on: pt.on };
+    } else if (rightFeet.indexOf(i) >= 0) {
+      const pt3 = contour[mod(i-2, contour.length)];
+      return { x: pt.x, y: pt3.y, on: pt.on };
+    }
+    return pt;
+  }).filter((pt, i) => {
+    if (leftFeet.indexOf(mod(i-1, contour.length)) >= 0) return false;
+    if (leftFeet.indexOf(mod(i-2, contour.length)) >= 0) return false;
+    if (rightFeet.indexOf(mod(i+1, contour.length)) >= 0) return false;
+    if (rightFeet.indexOf(mod(i+2, contour.length)) >= 0) return false;
+    return true;
+  });
+}
+
+/** The new left feets and right feets of the contour (a few points eliminated)
+ * @param { Contour } contour Original contour without feet removal 
+ * @param { number[] } leftFeet 
+ * @param { number[] } rightFeet 
+ * @returns { [ number[], number[] ] } */
+function updateFeet(contour, leftFeet, rightFeet) {
+  const removedIndices = [];
+  leftFeet.forEach(index => {
+    removedIndices.push(mod(index+1, contour.length));
+    removedIndices.push(mod(index+2, contour.length));
+  });
+  rightFeet.forEach(index => {
+    removedIndices.push(mod(index-1, contour.length));
+    removedIndices.push(mod(index-2, contour.length));
+  });
+  removedIndices.sort((a, b) => a - b);
+  let n = 0;
+  const indexMap = contour.map((pt, i) => {
+    if (removedIndices.indexOf(i) >= 0) n++;
+    return i - n;
+  })
+  return [
+    leftFeet.map(index => indexMap[index]),
+    rightFeet.map(index => indexMap[index])
+  ];
+}
+
+/** Return point indices in the glyph
+ * @param { GlyphData } glyph 
+ * @param { number } xMin 
+ * @param { number } xMax 
+ * @param { number } yMin 
+ * @param { number } yMax 
+ * @returns { [ number, number ][] } */
+function searchInGlyph(glyph, xMin, xMax, yMin, yMax) {
+  const result = [];
+  glyph.forEach((contour, cid) => {
+    contour.forEach((pt, pid) => {
+      if (pt.x >= xMin && pt.x <= xMax && pt.y >= yMin && pt.y <= yMax) 
+        result.push([ cid, pid ]);
+    });
+  });
+  return result;
+}
+
+/** Sink the removed feets
+ * @param { GlyphData } glyph 
+ * @param { [ number, number ][] } gLeftFeet 
+ * @param { [ number, number ][] } gRightFeet 
+ * @param { number[] } gLeftFeetLen 
+ * @param { number[] } gRightFeetLen 
+ * @param { maxStroke: number, sinkRatio: number } config 
+ * @returns { GlyphData } */
+function sinkFeet(glyph, gLeftFeet, gRightFeet, gLeftFeetLen, gRightFeetLen,
+{ maxStroke = 10, sinkRatio = 0.25 } = {}) {
+  /** @type { [ number, number ][] } */
+  const toSink = [];
+  const feetLengths = [];
+  gLeftFeet.forEach((lf, i) => {
+    const [ cid, pid ] = lf;
+    const lpt = glyph[cid][pid];
+    const rpt = glyph[cid][mod(pid+1, glyph[cid].length)];
+    if (Math.abs(lpt.y - rpt.y) <= 1) {
+      toSink.push(lf);
+      feetLengths.push(gLeftFeetLen[i]);
+    }
+  });
+  gRightFeet.forEach((rf, i) => {
+    const [ cid, pid ] = rf;
+    const lpt = glyph[cid][mod(pid-1, glyph[cid].length)];
+    const rpt = glyph[cid][pid];
+    if (Math.abs(lpt.y - rpt.y) > 1) return;
+    // Test if lpt is already in toSink
+    for (const lf of toSink) {
+      if (lf[0] === cid && lf[1] === mod(pid-1, glyph[cid].length)) {
+        return;
+      }
+    }
+    toSink.push([ cid, mod(pid-1, glyph[cid].length) ]);
+    feetLengths.push(gRightFeetLen[i]);
+  });
+
+  /** @type { GlyphData } */
+  const result = JSON.parse(JSON.stringify(glyph));
+  toSink.forEach((lf, i) => {
+    const [ cid, pid ] = lf;
+    const lpt = glyph[cid][pid];
+    const rpt = glyph[cid][mod(pid+1, glyph[cid].length)];
+    let found = searchInGlyph(glyph, lpt.x, rpt.x, lpt.y+2, lpt.y + maxStroke);
+    const minFoundY = Math.min(...found.map(([ ci, pi ]) => glyph[ci][pi].y));
+    found = found.filter(([ ci, pi ]) => 
+      Math.abs(glyph[ci][pi].y - minFoundY) <= 1);
+
+    found.forEach(([ ci, pi ]) => 
+      result[ci][pi].y -= feetLengths[i] * sinkRatio);
+    toSink.forEach(([ ci, pi ]) => {
+      const pt0 = result[ci][pi];
+      pt0.y -= feetLengths[i] * sinkRatio;
+      result[ci][mod(pi+1, result[ci].length)].y -= feetLengths[i] * sinkRatio;
+    });
+  });
+  return result;
+}
+
 /** Remove feet filter
  * @param { { maxStroke: number?, longestFoot: number?, 
  * angleTol: number? }) } config
  * @returns { PostFilter } */
 function removeFeet({ maxStroke = 10, longestFoot = 100, angleTol = 2 } = {}) {
-  return glyph =>  glyph.map(contour => {
-    const [ leftFeet, rightFeet ] = detectFeet(contour, 
-      { maxStroke, longestFoot, angleTol });
-    return contour.map((pt, i) => {
-      if (leftFeet.indexOf(i) >= 0) {
-        const pt3 = contour[mod(i+2, contour.length)];
-        return { x: pt.x, y: pt3.y, on: pt.on };
-      } else if (rightFeet.indexOf(i) >= 0) {
-        const pt3 = contour[mod(i-2, contour.length)];
-        return { x: pt.x, y: pt3.y, on: pt.on };
-      }
-      return pt;
-    }).filter((pt, i) => {
-      if (leftFeet.indexOf(mod(i-1, contour.length)) >= 0) return false;
-      if (leftFeet.indexOf(mod(i-2, contour.length)) >= 0) return false;
-      if (rightFeet.indexOf(mod(i+1, contour.length)) >= 0) return false;
-      if (rightFeet.indexOf(mod(i+2, contour.length)) >= 0) return false;
-      return true;
+  return glyph =>  {
+    /** @type { [ number, number ][] } Indices of left feet of the glyph */ 
+    const gLeftFeet = [];
+    /** @type { [ number, number ][] } Indices of right feet of the glyph */ 
+    const gRightFeet = [];
+    /** @type { number[] } Corresponding left feet lengths */ 
+    const gLeftFeetLen = [];
+    /** @type { number[] } Corresponding right feet lengths */ 
+    const gRightFeetLen = [];
+
+    // Initial feet removal
+    const feetRemovedGlyph = glyph.map((contour, cid) => {
+      let [ leftFeet, rightFeet ] = detectFeet(contour, 
+        { maxStroke, longestFoot, angleTol });
+      /** Contour with feet removed */
+      const feetRemoved = removeContourFeet(contour, leftFeet, rightFeet);
+      const [ leftFeetLen, rightFeetLen ] = 
+        feetLengths(contour, leftFeet, rightFeet);
+      [ leftFeet, rightFeet ] = updateFeet(contour, leftFeet, rightFeet);
+      leftFeet.forEach(pid => gLeftFeet.push([ cid, pid ]));
+      rightFeet.forEach(pid => gRightFeet.push([ cid, pid ]));
+      gLeftFeetLen.push(...leftFeetLen); gRightFeetLen.push(...rightFeetLen);
+      return feetRemoved;
     });
-  });
+
+    return sinkFeet(feetRemovedGlyph, gLeftFeet, gRightFeet, gLeftFeetLen, 
+      gRightFeetLen, { maxStroke });
+  }
 }
 
 /** Target points of the stroke end

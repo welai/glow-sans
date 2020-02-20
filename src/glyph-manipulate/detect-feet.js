@@ -39,9 +39,9 @@ function isLeftFoot(pt1, pt2, pt3, pt4, pt5, pt6, pt7, {
   const footWidth = dist(tuple(pt2), tuple(pt3));
   if (footWidth > maxStroke) return false;
   // Shoulder
-  if (pt1.y - pt4.y < 1.8 * maxStroke) return false;
+  if (pt1.y - pt4.y < 1.5 * maxStroke) return false;
   // The `月` case
-  if (pt6.on && !pt7.on) return false;
+  if (pt6.on && !pt7.on && pt6.y < pt5.y && pt7.x <= pt5.x + 10) return false;
   // The `非` case
   if (pt7.y > pt4.y && pt7.y - pt4.y < maxStroke) return false;
   // Presume that no feet at the top

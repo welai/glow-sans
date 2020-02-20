@@ -139,7 +139,7 @@ function vStrokeWidth() {
   );
   const hStrokeWidth = (yiGlyph[0][0].y - yiGlyph[0][1].y)*0.8;
   const contrast = globalParams.contrast;
-  return hStrokeWidth/(2-contrast)*contrast*1.2;
+  return hStrokeWidth/(2-contrast)*contrast;
 }
 
 /** TODO: This is temporary
