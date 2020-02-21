@@ -13,6 +13,7 @@ const globalParams = window.globalParams = {
   feetremoval: false,
   endsremoval: false,
   flattenends: 0.0,
+  hooktension: 0.0, 
   baseline: 100,
   latinscale: 1.0
 };

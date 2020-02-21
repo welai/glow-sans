@@ -41,11 +41,11 @@ function isLeftFoot(pt1, pt2, pt3, pt4, pt5, pt6, pt7, {
   // Shoulder
   if (pt1.y - pt4.y < 1.5 * maxStroke) return false;
   // The `月` case
-  if (pt6.on && !pt7.on && pt6.y < pt5.y && pt7.x <= pt5.x + 10) return false;
+  if (pt6.on && !pt7.on && pt6.y < pt5.y && pt6.y > pt2.y && pt7.x <= pt5.x + 10) return false;
   // The `非` case
   if (pt7.y > pt4.y && pt7.y - pt4.y < maxStroke) return false;
   // Presume that no feet at the top
-  if (pt4.y > 500) return false;
+  if (pt4.y > 750) return false;
   // Finally...
   return true;
 }

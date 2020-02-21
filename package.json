@@ -12,7 +12,7 @@
     "sample-shs-sc": "for FILE in fonts/SourceHanSansSC/SourceHanSansSC-*.json; do node scripts/sample-demo.js $FILE ${FILE//'fonts/SourceHanSansSC'/'samples'}; done",
     "sample-fira": "for FILE in fonts/Fira/FiraSans*.json; do node scripts/sample-fira.js $FILE ${FILE//'fonts/Fira'/'samples'}; done",
     "sample-raleway": "for FILE in fonts/Raleway/Raleway-v4020-*.json; do node scripts/sample-raleway.js $FILE ${FILE//'fonts/Raleway'/'samples'}; done",
-    "samples2model": "for FILE in samples/*.json; do python -m scripts.glyph_model_convert $FILE ${FILE//.json/.model.json}; done",
+    "samples2model": "rm -f samples/SourceHanSansSC-*.model.json; for FILE in samples/SourceHanSansSC-*.json; do python -m scripts.glyph_model_convert $FILE ${FILE//.json/.model.json}; done",
     "serve": "node scripts/serve-static.js"
   },
   "author": "Celestial Phineas",

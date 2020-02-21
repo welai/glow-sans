@@ -23,17 +23,16 @@ const modelFilter = ModelFilters.merge(
   ModelFilters.soften(params.softness)
 );
 
+const postFilterList = [
+  PostFilters.hookTension(params.hooktension),
+  PostFilters.strokeEndsFlatten(params.flattenends, params.endsremoval, 
+    { maxStroke: params.hstroke * 1.5 }),
+  PostFilters.softenDots(params.dotsoftness, 
+    { maxStroke: params.hstroke * 1.5 })
+];
 const removeFeetFilter = PostFilters.removeFeet(
   { maxStroke: params.vstroke * 1.5, longestFoot: 110 });
-const strokeEndFilter = PostFilters.strokeEndsFlatten(
-  params.flattenends, params.endsremoval, 
-  { maxStroke: params.hstroke * 1.5 });
-const softenDotFilter = PostFilters.softenDots(
-  params.dotsoftness, { maxStroke: params.hstroke * 1.5 }); 
-const postFilterList = [];
-if (params.feetremoval) postFilterList.push(removeFeetFilter);
-postFilterList.push(strokeEndFilter);
-postFilterList.push(softenDotFilter);
+if (params.feetremoval) postFilterList.splice(0, 0, removeFeetFilter);
 const postFilter = PostFilters.merge(...postFilterList,
   PostFilters.translation(0, -params.baseline), PostFilters.round());
 

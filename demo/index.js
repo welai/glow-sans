@@ -8,13 +8,13 @@ const { res, shsWeights, firaWeights, firaWidths, ralewayWeights,
 const { encodeParams, decodeParams } = require('./url-param');
 
 /** Sample text */
-const sampelText = '⼀三五⽔永过東南明湖区匪国國酬爱愛袋鸢鳶鬱靈鷹曌龘 Height 012369';
+const sampelText = '一三五已中水永过色東南明湖区匪国國酬爱愛袋鸢鳶鬱靈鷹曌龘 Height 012369';
 /** Get glyph models by the selected heights
  * @returns { GlyphModel[] } */
 function getCurrentModels() {
   const selector = $('#weight-select');
-  const keys = sampelText.split('').map(
-    char => 'uni' + char.charCodeAt(0).toString(16).toUpperCase());
+  const keys = sampelText.split('').map(char => 
+    'U+' + char.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0'));
   const modelDict = res.glyphModels[selector.val()];
   return keys.map(key => modelDict[key]);
 }
@@ -53,6 +53,7 @@ function getGlyphs() {
 
   const removeFeetFilter = PostFilters.removeFeet(
     { maxStroke: vStroke * 1.5, longestFoot: 110 });
+  const hookTensionFilter = PostFilters.hookTension(globalParams.hooktension);
   const strokeEndFilter = PostFilters.strokeEndsFlatten(
     globalParams.flattenends, globalParams.endsremoval, 
     { maxStroke: hStroke * 1.5 });
@@ -60,6 +61,7 @@ function getGlyphs() {
     globalParams.dotsoftness, { maxStroke: hStroke * 1.5 });
   const postFilterList = [];
   if (globalParams.feetremoval) postFilterList.push(removeFeetFilter);
+  postFilterList.push(hookTensionFilter);
   postFilterList.push(strokeEndFilter);
   postFilterList.push(softenDotFilter);
   const postFilter = PostFilters.merge(...postFilterList);
@@ -118,9 +120,9 @@ function updatePreview() {
 /** Estimate the horizontal stroke width @returns { number } */
 function hStrokeWidth() {
   const selector = $('#weight-select');
-  const yiGm = res.glyphModels[selector.val()]['uni2F00'];
+  const yiGm = res.glyphModels[selector.val()]['U+4E00'];
   if (!yiGm) 
-    throw Error('The character uni2F00 must be included in the glyph models.');
+    throw Error('The character U+4E00 must be included in the glyph models.');
   const yiGlyph = yiGm.restore(
     ModelFilters.weightAdjustment(globalParams.weight)
   );
@@ -131,9 +133,9 @@ function hStrokeWidth() {
 /** Estimate the vertical stroke width @returns { number } */
 function vStrokeWidth() {
   const selector = $('#weight-select');
-  const yiGm = res.glyphModels[selector.val()]['uni2F00'];
+  const yiGm = res.glyphModels[selector.val()]['U+4E00'];
   if (!yiGm) 
-    throw Error('The character uni2F00 must be included in the glyph models.');
+    throw Error('The character U+4E00 must be included in the glyph models.');
   const yiGlyph = yiGm.restore(
     ModelFilters.weightAdjustment(globalParams.weight)
   );

@@ -56,7 +56,7 @@ function removeContourFeet(contour, leftFeet, rightFeet) {
  * @param { number[] } leftFeet 
  * @param { number[] } rightFeet 
  * @returns { [ number[], number[] ] } */
-function updateFeet(contour, leftFeet, rightFeet) {
+function updateFeetIndices(contour, leftFeet, rightFeet) {
   const removedIndices = [];
   leftFeet.forEach(index => {
     removedIndices.push(mod(index+1, contour.length));
@@ -108,6 +108,7 @@ function sinkFeet(glyph, gLeftFeet, gRightFeet, gLeftFeetLen, gRightFeetLen,
 { maxStroke = 10, sinkRatio = 0.25 } = {}) {
   /** @type { [ number, number ][] } */
   const toSink = [];
+  /** @type { number[] } Corresponding lenghts of the feet to sink */
   const feetLengths = [];
   gLeftFeet.forEach((lf, i) => {
     const [ cid, pid ] = lf;
@@ -137,20 +138,17 @@ function sinkFeet(glyph, gLeftFeet, gRightFeet, gLeftFeetLen, gRightFeetLen,
   const result = JSON.parse(JSON.stringify(glyph));
   toSink.forEach((lf, i) => {
     const [ cid, pid ] = lf;
-    const lpt = glyph[cid][pid];
-    const rpt = glyph[cid][mod(pid+1, glyph[cid].length)];
-    let found = searchInGlyph(glyph, lpt.x, rpt.x, lpt.y+2, lpt.y + maxStroke);
-    const minFoundY = Math.min(...found.map(([ ci, pi ]) => glyph[ci][pi].y));
+    const lpt = result[cid][pid];
+    const rpt = result[cid][mod(pid+1, result[cid].length)];
+    let found = searchInGlyph(result, lpt.x, rpt.x, lpt.y+2, lpt.y + maxStroke);
+    const minFoundY = Math.min(...found.map(([ ci, pi ]) => result[ci][pi].y));
     found = found.filter(([ ci, pi ]) => 
-      Math.abs(glyph[ci][pi].y - minFoundY) <= 1);
+      Math.abs(result[ci][pi].y - minFoundY) <= 1);
 
     found.forEach(([ ci, pi ]) => 
       result[ci][pi].y -= feetLengths[i] * sinkRatio);
-    toSink.forEach(([ ci, pi ]) => {
-      const pt0 = result[ci][pi];
-      pt0.y -= feetLengths[i] * sinkRatio;
-      result[ci][mod(pi+1, result[ci].length)].y -= feetLengths[i] * sinkRatio;
-    });
+    lpt.y -= feetLengths[i] * sinkRatio;
+    rpt.y -= feetLengths[i] * sinkRatio;
   });
   return result;
 }
@@ -178,7 +176,7 @@ function removeFeet({ maxStroke = 10, longestFoot = 100, angleTol = 2 } = {}) {
       const feetRemoved = removeContourFeet(contour, leftFeet, rightFeet);
       const [ leftFeetLen, rightFeetLen ] = 
         feetLengths(contour, leftFeet, rightFeet);
-      [ leftFeet, rightFeet ] = updateFeet(contour, leftFeet, rightFeet);
+      [ leftFeet, rightFeet ] = updateFeetIndices(contour, leftFeet, rightFeet);
       leftFeet.forEach(pid => gLeftFeet.push([ cid, pid ]));
       rightFeet.forEach(pid => gRightFeet.push([ cid, pid ]));
       gLeftFeetLen.push(...leftFeetLen); gRightFeetLen.push(...rightFeetLen);
@@ -297,6 +295,44 @@ function softenDots(value, { maxStroke = 10 }) {
   });
 }
 
+/** Detect a horizontal hook
+ * @param { ControlPoint } pt1 
+ * @param { ControlPoint } pt2 
+ * @param { ControlPoint } pt3 
+ * @param { ControlPoint } pt4 
+ * @param { ControlPoint } pt5 
+ * @param { ControlPoint } pt6 
+ * @returns { boolean } */
+function isHook(pt1, pt2, pt3, pt4, pt5, pt6) {
+  if (pt1.on || pt2.on || !pt3.on || !pt4.on || pt5.on || pt6.on) return false;
+  if (!(Math.abs(pt3.y - pt2.y) <= 1) || !(Math.abs(pt4.y - pt3.y) <= 1) 
+  || !(Math.abs(pt5.y - pt4.y) <= 1) || !(Math.abs(pt5.y - pt4.y) <= 1)) 
+    return false;
+  if (pt1.y > pt2.y && pt6.y > pt5.y) return true;
+}
+
+/** Tension of the horizonal hook strokes
+ * @param { number } ratio 
+ * @returns { PostFilter } */
+function hookTension(ratio) {
+  return glyph => glyph.map(contour => {
+    const result = JSON.parse(JSON.stringify(contour));
+    result.forEach((pt1, i) => {
+      const pt2 = result[mod(i+1, result.length)],
+            pt3 = result[mod(i+2, result.length)],
+            pt4 = result[mod(i+3, result.length)],
+            pt5 = result[mod(i+4, result.length)],
+            pt6 = result[mod(i+5, result.length)];
+      if (isHook(pt1, pt2, pt3, pt4, pt5, pt6)) {
+        const cx = (pt3.x + pt4.x)/2;
+        pt3.x = pt3.x * (1-ratio) + cx * ratio;
+        pt4.x = pt4.x * (1-ratio) + cx * ratio;
+      }
+    });
+    return result;
+  });
+}
+
 /** Translation
  * @param { number } xOffset 
  * @param { number } yOffset 
@@ -336,6 +372,7 @@ module.exports = {
   strokeEndsFlatten,
   scaling,
   softenDots,
+  hookTension,
   round,
   merge,
 }
