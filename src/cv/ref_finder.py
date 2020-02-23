@@ -43,7 +43,7 @@ class RefFinder(object):
       self.skel_pts_by_label[pt_label-1].append(pt)
 
   def find_ref(self, x, y):
-    result = None
+    result = np.array([ x, y ])
     h, w = self.labeled.shape
     scale = self.scale_factor
     xi = int(x * scale + 0.5); yi = int(y * scale + 0.5)

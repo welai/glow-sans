@@ -19,8 +19,12 @@ with open(sys.argv[1], 'r') as in_fp, open(sys.argv[2], 'w') as out_fp:
   i = 0
   for char in file_js:
     glyph = file_js[char]
-    glyph_model = GlyphModel(glyph)
-    result[char] = glyph_model.get_model_object()
+    try:
+      glyph_model = GlyphModel(glyph)
+      result[char] = glyph_model.get_model_object()
+    except Exception as e:
+      print('In file "' + sys.argv[1] + '", gid "' + char + '":')
+      print(e)
     i += 1
     bar.cursor.restore()
     bar.draw(value=i)

@@ -1,8 +1,8 @@
 // Extract glyphs in a font given by a charset file
 // Usage example:
-//  node  scripts/extract-han.js\
+//  node  scripts/extract-han-set.js\
 //        fonts/SourceHanSansSC/SourceHanSansSC-Regular.json\
-//        charsets/gb-han/tongyong-1.tsv\
+//        encoding/charsets/gb-han/tongyong-1.tsv\
 //        build-files/extracted/shs-sc-regular_tongyong-1.json
 const fs = require('fs');
 
