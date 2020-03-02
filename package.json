@@ -8,6 +8,7 @@
     "build-demo": "browserify demo/index.js -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/proposal-class-properties ] ] | uglifyjs -o dist/index.js",
     "convert-model": "python -m scripts.glyph_model_convert",
     "dump-fonts": "for FILE in fonts/*/*.otf; do otfccdump $FILE --pretty --ignore-glyph-order --hex-cmap -o ${FILE//.otf/.json}; done",
+    "extract-han-models": "bash scripts/extract-han-models.sh",
     "init-fonts": "cd fonts && bash init.sh",
     "sample-shs-sc": "for FILE in fonts/SourceHanSansSC/SourceHanSansSC-*.json; do node scripts/sample-demo.js $FILE ${FILE//'fonts/SourceHanSansSC'/'samples'}; done",
     "sample-fira": "for FILE in fonts/Fira/FiraSans*.json; do node scripts/sample-fira.js $FILE ${FILE//'fonts/Fira'/'samples'}; done",
@@ -24,13 +25,14 @@
     "babelify": "^10.0.0",
     "browserify": "^16.5.0",
     "canvas": "^2.6.1",
+    "caryll-shapeops": "^0.3.1",
     "connect": "^3.7.0",
     "nodemon": "^2.0.2",
     "opencv": "^6.2.0",
-    "serve-static": "^1.14.1"
+    "serve-static": "^1.14.1",
+    "uglify-js": "^3.7.7"
   },
   "dependencies": {
-    "gridcanvas": "^0.1.8",
-    "uglify-js": "^3.7.7"
+    "gridcanvas": "^0.1.8"
   }
 }

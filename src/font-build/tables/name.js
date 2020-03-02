@@ -20,47 +20,53 @@ function record(nameID, nameString, languageID) { return ({
   "nameString": nameString
 }); }
 
-module.exports = function () {
+/** Get the `name` table
+ * @param { 'SC'|'TC'|'J' } langStr Language string
+ * @param { string } weightStr      Font weight string
+ * @param { string } widthStr       Font width string
+ * @param { string } verStr         Font version string */
+function getTable (langStr, weightStr, widthStr, verStr) {
   const name = [
-    record(copyrightNotice,   "© 2014-2019 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'."),
-    record(familyName,        'Source Han Sans SC Normal'),
-    record(subfamilyName,     'Regular'),
-    record(identifier,        '2.001;ADBO;SourceHanSansSC-Normal;ADOBE'),
-    record(fullName,          'Source Han Sans SC Normal'),
-    record(versionStr,        'Version 2.001;hotconv 1.0.107;makeotfexe 2.5.65593'),
-    record(psName,            'SourceHanSansSC-Normal'),
-    record(trademark,         'Source is a trademark of Adobe in the United States and/or other countries.'),
-    record(manufacturer,      'Adobe'),
-    record(designer,          'Ryoko NISHIZUKA 西塚涼子 (kana, bopomofo & ideographs); Paul D. Hunt (Latin, Greek & Cyrillic); Sandoll Communications 산돌커뮤니케이션, Soo-young JANG 장수영 & Joo-yeon KANG 강주연 (hangul elements, letters & syllables)'),
+    record(copyrightNotice,   'Glow Sans © 2020 Project Welai. Source Han Sans © 2014-2019 Adobe (http://www.adobe.com/). Fira Sans © 2012-2018 Mozilla & bBox Type. Raleway © 2012 The Raleway Authors.'),
+    record(familyName,        `Glow Sans ${widthStr}`),
+    record(subfamilyName,     weightStr),
+    record(identifier,        `${verStr};WELA;GlowSans`),
+    record(fullName,          `Glow Sans ${langStr} ${widthStr}`),
+    record(versionStr,        `Version ${verStr};otfcc 0.10.3`),
+    record(psName,            `GlowSans${langStr}-${widthStr}`),
+    record(designer,          'Ryoko NISHIZUKA 西塚涼子 (kana, bopomofo & ideographs); Paul D. Hunt (Latin, Greek & Cyrillic); Sandoll Communications 산돌커뮤니케이션, Soo-young JANG 장수영 & Joo-yeon KANG 강주연 (hangul elements, letters & syllables); Glow Sans is built by Celestial Phineas.'),
     record(description,       'Dr. Ken Lunde (project architect, glyph set definition & overall production); Masataka HATTORI 服部正貴 (production & ideograph elements)'),
-    record(urlVendor,         'http://www.adobe.com/type/'),
-    record(urlDesigner,       'http://www.adobe.com/type/'),
+    record(urlVendor,         'https://github.com/welai'),
+    record(urlDesigner,       'https://github.com/celestialphineas'),
     record(licenseDesc,       'This Font Software is licensed under the SIL Open Font License, Version 1.1. This Font Software is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the SIL Open Font License for the specific language, permissions and limitations governing your use of this Font Software.'),
     record(urlLicense,        'http://scripts.sil.org/OFL'),
-    record(typoFamilyName,    'Source Han Sans SC'),
-    record(typoSubfamilyName, 'Normal'),
-    record(sampleText,        'Sample text.')
+    record(typoFamilyName,    `Glow Sans ${langStr}`),
+    record(typoSubfamilyName, `${widthStr} ${weightStr}`),
+    record(sampleText,        '青青子衿，悠悠我心。縱我不往，子寧不嗣音？')
   ];
-  [ zh_CN, zh_SG ].forEach((lang) => name.push(
-    record(familyName,        '思源黑体 Normal', lang),
-    record(subfamilyName,     'Regular', lang),
-    record(fullName,          '思源黑体 Normal', lang),
-    record(typoFamilyName,    '思源黑体', lang),
-    record(typoSubfamilyName, 'Normal', lang)
-  ));
-  // [ zh_HK, zh_MO, zh_TW ].forEach((lang) => { name.push(
-  //   record(familyName,        '思源黑体 Normal', lang),
-  //   record(subfamilyName,     'Regular', lang),
-  //   record(fullName,          '思源黑体 Normal', lang),
-  //   record(typoFamilyName,    '思源黑体', lang),
-  //   record(typoSubfamilyName, 'Normal', lang)
-  // ); });
-  // [ jp ].forEach((lang) => { name.push(
-  //   record(familyName,        '思源黑体 Normal', lang),
-  //   record(subfamilyName,     'Regular', lang),
-  //   record(fullName,          '思源黑体 Normal', lang),
-  //   record(typoFamilyName,    '思源黑体', lang),
-  //   record(typoSubfamilyName, 'Normal', lang)
-  // ); });
+  switch (langStr) {
+    case 'SC': [ zh_CN, zh_SG ].forEach((lang) => name.push(
+      record(familyName,        `未来荧黑 ${widthStr}`, lang),
+      record(subfamilyName,     `${weightStr}`, lang),
+      record(fullName,          `未来荧黑 ${widthStr}`, lang),
+      record(typoFamilyName,    `未来荧黑`, lang),
+      record(typoSubfamilyName, `${widthStr} ${weightStr}`, lang)
+    )); break;
+    case 'TC': [ zh_HK, zh_MO, zh_TW ].forEach((lang) => name.push(
+      record(familyName,        `未来熒黑${widthStr}`, lang),
+      record(subfamilyName,     `${weightStr}`, lang),
+      record(fullName,          `未来熒黑 ${widthStr}`, lang),
+      record(typoFamilyName,    `未来熒黑`, lang),
+      record(typoSubfamilyName, `${widthStr} ${weightStr}`, lang)
+    )); break;
+    case 'J': [ jp ].forEach((lang) => name.push(
+      record(familyName,        `ヒラリ角ゴ ${widthStr}`, lang),
+      record(subfamilyName,     `${weightStr}`, lang),
+      record(fullName,          `ヒラリ角ゴ ${widthStr}`, lang),
+      record(typoFamilyName,    `ヒラリ角ゴ`, lang),
+      record(typoSubfamilyName, `${widthStr} ${weightStr}`, lang)
+    )); break;
+    default: throw Error(`Unimplemented language for ${langStr}`);
+  }
   return name;
 }
