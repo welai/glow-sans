@@ -32,7 +32,7 @@ function getTable (langStr, weightStr, widthStr, verStr) {
     record(subfamilyName,     weightStr),
     record(identifier,        `${verStr};WELA;GlowSans`),
     record(fullName,          `Glow Sans ${langStr} ${widthStr}`),
-    record(versionStr,        `Version ${verStr};otfcc 0.10.3`),
+    record(versionStr,        `Version ${verStr}`),
     record(psName,            `GlowSans${langStr}-${widthStr}`),
     record(designer,          'Ryoko NISHIZUKA 西塚涼子 (kana, bopomofo & ideographs); Paul D. Hunt (Latin, Greek & Cyrillic); Sandoll Communications 산돌커뮤니케이션, Soo-young JANG 장수영 & Joo-yeon KANG 강주연 (hangul elements, letters & syllables); Glow Sans is built by Celestial Phineas.'),
     record(description,       'Dr. Ken Lunde (project architect, glyph set definition & overall production); Masataka HATTORI 服部正貴 (production & ideograph elements)'),

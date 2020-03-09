@@ -308,11 +308,13 @@ function codeBlockName(unicode) {
 
 /** Check if the code point is in the block
  * @param { number } unicode Unicode
- * @param { string | undefined } blockname Name of the code block
+ * @param { ...string } blocknames Names of the code blocks
  * @returns { boolean } */
-function codeInBlock(unicode, blockname) {
-  const [ lower, upper ] = codeRange(blockname) || [ -1, -1 ];
-  return unicode >= lower && unicode <= upper;
+function codeInBlock(unicode, ...blocknames) {
+  if (blocknames.length === 0) return false;
+  const [ lower, upper ] = codeRange(blocknames[0]) || [ -1, -1 ];
+  return (unicode >= lower && unicode <= upper) 
+    || codeInBlock(unicode, ...blocknames.slice(1));
 }
 
 /** Check if the character code is a Han character

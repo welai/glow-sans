@@ -27,27 +27,27 @@ function getTable(weightClass, widthClass, xHeight, capHeight) {
       "Latin_Extended_Additional": true
     },
     "ulUnicodeRange2": {
-      "Number_Forms": true,
-      "Enclosed_Alphanumerics": true,
-      "Box_Drawing": true,
-      "Block_Elements": true,
-      "Geometric_Shapes": true,
-      "CJK_Symbols_And_Punctuation": true,
-      "Hiragana": true,
-      "Katakana": true,
-      "Bopomofo": true,
+      // "Number_Forms": true,
+      "Enclosed_Alphanumerics": true, // done
+      // "Box_Drawing": true,
+      // "Block_Elements": true,
+      "Geometric_Shapes": true, // done
+      "CJK_Symbols_And_Punctuation": true, // done
+      "Hiragana": true, // done
+      "Katakana": true, // done
+      "Bopomofo": true, // done
       // "Hangul_Compatibility_Jamo": true,
-      "Enclosed_CJK_Letters_And_Months": true,
-      "CJK_Compatibility": true,
+      // "Enclosed_CJK_Letters_And_Months": true,
+      // "CJK_Compatibility": true,
       // "Hangul_Syllables": true,
-      "Non_Plane_0": true,
-      "CJK_Unified_Ideographs": true,
-      "CJK_Strokes": true
+      "Non_Plane_0": true, // done
+      "CJK_Unified_Ideographs": true, // done
+      "CJK_Strokes": true // done
     },
     "ulUnicodeRange3": {
-      "Vertical_Forms_and_CJK_Compatibility_Forms": true,
-      "Small_Form_Variants": true,
-      "Halfwidth_And_Fullwidth_Forms": true
+      "Vertical_Forms_and_CJK_Compatibility_Forms": true, // done
+      // "Small_Form_Variants": true,
+      "Halfwidth_And_Fullwidth_Forms": true // done
     },
     "ulUnicodeRange4": {},
     "fsSelection": {},
