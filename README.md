@@ -49,6 +49,18 @@ $ npm run extract-han-models 8
 ```
 will run the script in 8 processes.
 
+Also, kana-like glyphs need glyph model conversion as well. Run,
+
+```
+$ npm run extract-kana-models
+```
+
+The other gid categories need glyph extraction only.
+
+```
+$ npm run extract-gid-categories
+```
+
 ## Build demo
 
 Before building the demo, you have to make sure that the fonts have already been downloaded and dumped.

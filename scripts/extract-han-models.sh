@@ -29,7 +29,7 @@ for WEIGHT in $WEIGHTS; do
     npm run convert-model $EXTRACT_DIR/$TARGET $MODEL_DIR/$TARGET &&
     rm $EXTRACT_DIR/$TARGET &
     I_PROCESS=$((I_PROCESS+1))
-    if (( I_PROCESS % N_PROCESSSES == 0 )); then
+    if (( I_PROCESS % N_PROCESSES == 0 )); then
       wait
       I_PROCESS=0
     fi
@@ -50,7 +50,7 @@ for WEIGHT in $WEIGHTS; do
     npm run convert-model $EXTRACT_DIR/$TARGET $MODEL_DIR/$TARGET &&
     rm $EXTRACT_DIR/$TARGET &
     I_PROCESS=$((I_PROCESS+1))
-    if (( I_PROCESS % N_PROCESSSES == 0 )); then
+    if (( I_PROCESS % N_PROCESSES == 0 )); then
       wait
       I_PROCESS=0
     fi
@@ -71,7 +71,7 @@ for WEIGHT in $WEIGHTS; do
     npm run convert-model $EXTRACT_DIR/$TARGET $MODEL_DIR/$TARGET &&
     rm $EXTRACT_DIR/$TARGET &
     I_PROCESS=$((I_PROCESS+1))
-    if (( I_PROCESS % N_PROCESSSES == 0 )); then
+    if (( I_PROCESS % N_PROCESSES == 0 )); then
       wait
       I_PROCESS=0
     fi

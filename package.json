@@ -9,6 +9,8 @@
     "convert-model": "python -m scripts.glyph_model_convert",
     "dump-fonts": "for FILE in fonts/*/*.otf; do otfccdump $FILE --pretty --ignore-glyph-order --hex-cmap -o ${FILE//.otf/.json}; done",
     "extract-han-models": "bash scripts/extract-han-models.sh",
+    "extract-kana-models": "bash scripts/extract-kana-models.sh",
+    "extract-gid-categories": "node scripts/extract-gid-categories.js",
     "init-fonts": "cd fonts && bash init.sh",
     "sample-shs-sc": "for FILE in fonts/SourceHanSansSC/SourceHanSansSC-*.json; do node scripts/sample-demo.js $FILE ${FILE//'fonts/SourceHanSansSC'/'samples'}; done",
     "sample-fira": "for FILE in fonts/Fira/FiraSans*.json; do node scripts/sample-fira.js $FILE ${FILE//'fonts/Fira'/'samples'}; done",

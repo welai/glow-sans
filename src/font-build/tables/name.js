@@ -60,10 +60,10 @@ function getTable (langStr, weightStr, widthStr, verStr) {
       record(typoSubfamilyName, `${widthStr} ${weightStr}`, lang)
     )); break;
     case 'J': [ jp ].forEach((lang) => name.push(
-      record(familyName,        `ヒラリ角ゴ ${widthStr}`, lang),
+      record(familyName,        `ヒカリ角ゴ ${widthStr}`, lang),
       record(subfamilyName,     `${weightStr}`, lang),
-      record(fullName,          `ヒラリ角ゴ ${widthStr}`, lang),
-      record(typoFamilyName,    `ヒラリ角ゴ`, lang),
+      record(fullName,          `ヒカリ角ゴ ${widthStr}`, lang),
+      record(typoFamilyName,    `ヒカリ角ゴ`, lang),
       record(typoSubfamilyName, `${widthStr} ${weightStr}`, lang)
     )); break;
     default: throw Error(`Unimplemented language for ${langStr}`);
