@@ -1,10 +1,23 @@
 // Handling cmap resources
 const { readJSON } = require('./read-res');
 
+/** @typedef {{ [cid:string]: string }} Cmap */
+/** @type {{ fira?: Cmap. raleway?: Cmap, 
+ * shsJ?: Cmap, shsK?: Cmap, shsSC?: Cmap }} */
+let cmaps = {};
+
+/** @param { 'fira' | 'raleway' | 'shsJ' | 'shsK' | 'shsSC' } key 
+ * @param { string } path @returns { Cmap }  */
+function getCmap(key, path) {
+  if (cmaps[key] === undefined)
+    cmaps[key] = readJSON(path)
+  return cmaps[key];
+}
+
 module.exports = {
-  fira: readJSON('encoding/cmaps/fira.json'),
-  raleway: readJSON('encoding/cmaps/raleway.json'),
-  shsJ: readJSON('encoding/cmaps/shs-j.json'),
-  shsK: readJSON('encoding/cmaps/shs-k.json'),
-  shsSC: readJSON('encoding/cmaps/shs-sc.json')
+  get fira() { return getCmap('fira', 'encoding/cmaps/fira.json'); },
+  get raleway() { return getCmap('raleway', 'encoding/cmaps/raleway.json'); },
+  get shsJ() { return getCmap('shsJ', 'encoding/cmaps/shs-j.json'); },
+  get shsK() { return getCmap('shsK', 'encoding/cmaps/shs-k.json'); },
+  get shsSC() { return getCmap('shsSC', 'encoding/cmaps/shs-sc.json'); }
 }

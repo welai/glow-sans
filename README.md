@@ -23,7 +23,7 @@ Download font files to directory `fonts`,
 $ npm run init-fonts
 ```
 
-If you are living in China, add argument `-m` would speed up the downloading process with the gitee mirrors.
+If you live in China, add argument `-m` would speed up the downloading process with the gitee mirrors.
 ```
 $ npm run init-fonts -m
 ```

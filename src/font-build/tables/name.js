@@ -70,3 +70,5 @@ function getTable (langStr, weightStr, widthStr, verStr) {
   }
   return name;
 }
+
+module.exports = getTable;

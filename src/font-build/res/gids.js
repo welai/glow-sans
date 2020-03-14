@@ -1,4 +1,5 @@
 // Handling gid resources
+const path = require('path');
 const { readTsv, filesInDir } = require('./read-res');
 
 const gidFilesJ = filesInDir('encoding/gid/shs-j-han');

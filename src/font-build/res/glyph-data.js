@@ -53,7 +53,7 @@ function kanaLikeModels(weight) {
  * @param { 'J' | 'K' | 'SC' } lang    Language tag
  * @param { 'ExtraLight' | 'Light' | 'Normal' | 'Regular' | 'Medium' | 'Bold' 
  * | 'Heavy' } weight  Weight
- * @returns { { [key:string] { advanceWidth: number, contours: GlyphData }} } 
+ * @returns { { [key:string]: { advanceWidth: number, contours: GlyphData } } } 
  * Path of the extracted glyphs */
 function extractedGlyphs(category, lang, weight) {
   const pathInProject = 
