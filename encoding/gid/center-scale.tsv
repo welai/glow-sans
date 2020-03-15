@@ -1,3 +1,4 @@
+ellipsis	U+2026	…
 uni2460	U+2460	①
 uni2461	U+2461	②
 uni2462	U+2462	③
@@ -204,6 +205,16 @@ glyph65156	U+302F	〯
 uni3004	U+3004	〄
 uniFE45	U+FE45	﹅
 uniFE46	U+FE46	﹆
+glyph63180	U+FF10	０
+glyph63181	U+FF11	１
+glyph63182	U+FF12	２
+glyph63183	U+FF13	３
+glyph63184	U+FF14	４
+glyph63185	U+FF15	５
+glyph63186	U+FF16	６
+glyph63187	U+FF17	７
+glyph63188	U+FF18	８
+glyph63189	U+FF19	９
 glyph63197	U+FF21	Ａ
 glyph63198	U+FF22	Ｂ
 glyph63199	U+FF23	Ｃ
@@ -256,3 +267,7 @@ glyph63251	U+FF57	ｗ
 glyph63252	U+FF58	ｘ
 glyph63253	U+FF59	ｙ
 glyph63254	U+FF5A	ｚ
+glyph63129	U+2018	‘
+glyph63130	U+2019	’
+glyph63132	U+201C	“
+glyph63133	U+201D	”

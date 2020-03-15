@@ -1,8 +1,7 @@
 // Extract glyphs in various categories
 const fs = require('fs');
-const path = require('path');
 
-[ 'J', 'K', 'SC' ].forEach(lang => {
+[ 'J', 'K', 'SC', 'TC' ].forEach(lang => {
   const fontName = `SourceHanSans${lang === 'J' ? '' : lang}`;
   [ 'ExtraLight', 'Light', 'Normal', 'Regular', 'Medium', 'Bold', 'Heavy' ]
   .forEach(weight => {

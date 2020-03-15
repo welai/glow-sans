@@ -1,21 +1,23 @@
 const fs = require('fs');
+const cmaps = require('./res/cmaps');
+const gids = require('./res/gids');
 const { getParam } = require('./res/params');
+const { getGSUB, getGPOS, reduceGSUB } = require('./res/features');
 const { firaFont, ralewayFont, index2FiraName, index2RalewayName,
   listHanModelPaths, readModels, 
   extractedGlyphs, kanaLikeModels } = require('./res/glyph-data');
-const { hanModelFilter, hanPostFilter, kanaModelFilter, 
-  model2Glyph, baseScaleGlyph, centerScaleGlyph, 
-  lengthenGlyph, puncLikeGlyph, latinGlyph } = require('./glyph-filters');
-const cmaps = require('./res/cmaps');
-const gids = require('./res/gids');
+  const { hanModelFilter, hanPostFilter, kanaModelFilter, 
+    model2Glyph, baseScaleGlyph, centerScaleGlyph, 
+    lengthenGlyph, puncLikeGlyph, latinGlyph } = require('./glyph-filters');
 
 // Parameters
 const param = getParam('compressed-test');//('regular-test');
 // Font configuration
 const lang = 'SC';
 const buildWeight = 'Regular';
+const isBold = buildWeight === 'Bold';
 const buildWidth = 'Compressed';//'Normal';
-const buildVersion = '0.5';
+const buildVersion = '0.6';
 const weightClass = 400;
 const widthClass = 2;//5;
 
@@ -30,7 +32,7 @@ const BASE = require('./tables/BASE')(
 // GDEF table
 const GDEF = require('./tables/GDEF')();
 // head table
-const head = require('./tables/head')(buildVersion);
+const head = require('./tables/head')(buildVersion, isBold);
 // hhea table
 const hhea = require('./tables/hhea')();
 // name table
@@ -49,35 +51,42 @@ const post = require('./tables/post')();
 const vhea = require('./tables/vhea')(param.width);
 
 // Source language
-const sourceLang = lang === 'TC'? 'K' : lang;
+const hanLang = lang === 'TC'? 'K' : lang;
 // Source weight
 const sourceWeight = [ 'ExtraLight', 'Light', 'Normal', 'Regular', 'Medium',
   'Bold', 'Heavy' ][param.shs];
 
+//#region cmap & glyf tables
 // cmap table
 let cmap = {};
 // glyf table
 const glyf = {};
 /** @type { Set<string> } */ 
 let shsSet;
-switch (sourceLang) {
+switch (lang) {
   case 'SC': cmap = cmaps.shsSC; shsSet = gids.setSC; break;
-  case 'K': cmap = cmaps.shsK; shsSet = gids.setK; break;
+  case 'TC': case 'K': cmap = cmaps.shsK; shsSet = gids.setK; break;
   case 'J': cmap = cmaps.shsJ; shsSet = gids.setJ; break;
   default: throw Error(`Unknown lang tag ${lang} specified`);
 }
 
+// Not def
+glyf['.notdef'] = latinFont.glyf['.notdef'];
+
 // Add Latin
 for (let cid in cmap) {
-  const gid = latinFont.cmap[cid];
+  const ralewayNumbers = {
+    zero: "glyph726", one: "glyph727", two: "glyph728", three: "glyph729",
+    four: "glyph730", five: "glyph731", six: "glyph732", seven: "glyph733",
+    eight: "glyph734", nine: "glyph735"
+  };
+  let gid = latinFont.cmap[cid];
   if (shsSet.has(cmap[cid])) continue;
+  if (param.raleway && gid in ralewayNumbers) gid = ralewayNumbers[gid];
   if (gid !== undefined) {
     glyf[cmap[cid]] = latinGlyph(
       latinFont.glyf[gid], param.baseline, param.latinscale);
   }
-  // TODO: Raleway numbers
-  // TODO: Fix space
-  // TODO: Fix center scale
 }
 
 // Add CJK glyphs to the glyf table
@@ -91,10 +100,10 @@ for (let cid in cmap) {
 
 (function addCJKSymbols() {
   var sourceGlyphs = {
-    baseScale: extractedGlyphs('base-scale', sourceLang, sourceWeight),
-    centerScale: extractedGlyphs('center-scale', sourceLang, sourceWeight),
-    lengthen: extractedGlyphs('lengthen', sourceLang, sourceWeight),
-    puncLike: extractedGlyphs('punc-like', sourceLang, sourceWeight)
+    baseScale: extractedGlyphs('base-scale', lang, sourceWeight),
+    centerScale: extractedGlyphs('center-scale', lang, sourceWeight),
+    lengthen: extractedGlyphs('lengthen', lang, sourceWeight),
+    puncLike: extractedGlyphs('punc-like', lang, sourceWeight)
   }
   for (let key in sourceGlyphs.baseScale) 
     glyf[key] = baseScaleGlyph(
@@ -111,7 +120,7 @@ for (let cid in cmap) {
 })();
 
 (function addHan() {
-  const hanModelFiles = listHanModelPaths(sourceLang, sourceWeight);
+  const hanModelFiles = listHanModelPaths(hanLang, sourceWeight);
   const modelFilter = hanModelFilter(param);
   const postFilter = hanPostFilter(param);
   function addModels(modelpath) {
@@ -123,7 +132,19 @@ for (let cid in cmap) {
   hanModelFiles.forEach(addModels);
 })();
 
+// Clean up cmap
+for (const cid in cmap) {
+  const gid = cmap[cid];
+  if (glyf[gid] === undefined) delete cmap[cid];
+}
+//#endregion
+
+//#region GSUB & GPOS tables
+const GSUB = reduceGSUB(getGSUB(lang, sourceWeight));
+const GPOS = getGPOS(lang, sourceWeight);
+//#endregion
+
 var fontObject = { head, OS_2, name, CFF_, hhea, vhea, post, BASE, 
-  cmap, glyf, GDEF, GPOS: {}, GSUB: {} };
+  cmap, glyf, GDEF, GPOS, GSUB };
 
 fs.writeFileSync('working/hello.json', JSON.stringify(fontObject));

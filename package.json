@@ -11,6 +11,7 @@
     "extract-han-models": "bash scripts/extract-han-models.sh",
     "extract-kana-models": "bash scripts/extract-kana-models.sh",
     "extract-gid-categories": "node scripts/extract-gid-categories.js",
+    "extract-shs-features": "node scripts/extract-shs-features.js",
     "init-fonts": "cd fonts && bash init.sh",
     "sample-shs-sc": "for FILE in fonts/SourceHanSansSC/SourceHanSansSC-*.json; do node scripts/sample-demo.js $FILE ${FILE//'fonts/SourceHanSansSC'/'samples'}; done",
     "sample-fira": "for FILE in fonts/Fira/FiraSans*.json; do node scripts/sample-fira.js $FILE ${FILE//'fonts/Fira'/'samples'}; done",

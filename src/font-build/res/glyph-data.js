@@ -12,7 +12,7 @@ const path = require('path');
 const { readJSON, expandPath } = require('./read-res');
 
 /** Return a list of available Han models
- * @param { 'J' | 'K' | 'SC' } lang Language tag
+ * @param { 'J' | 'K' | 'SC' | 'TC' } lang Language tag
  * @param { 'ExtraLight' | 'Light' | 'Normal' | 'Regular' | 'Medium' | 'Bold' 
  * | 'Heavy' } weight Model weight
  * @returns { string[] } Paths of model files relative to the project root */
@@ -50,7 +50,7 @@ function kanaLikeModels(weight) {
 /** The path to the extracted glyphs of a certain gid category and weight
  * @param { 'base-scale' | 'center-scale' | 'lengthen' | 'punc-like' } category 
  * Gid category
- * @param { 'J' | 'K' | 'SC' } lang    Language tag
+ * @param { 'J' | 'K' | 'SC' | 'TC' } lang    Language tag
  * @param { 'ExtraLight' | 'Light' | 'Normal' | 'Regular' | 'Medium' | 'Bold' 
  * | 'Heavy' } weight  Weight
  * @returns { { [key:string]: { advanceWidth: number, contours: GlyphData } } } 
@@ -90,7 +90,7 @@ function ralewayFont(weight) {
 }
 
 /** Get Source Han Sans font data
- * @param { 'K' | 'J' | 'SC' } lang 
+ * @param { 'J' | 'K' | 'SC' | 'TC' } lang 
  * @param { 'ExtraLight' | 'Light' | 'Normal' | 'Regular' | 'Medium'
  * | 'Bold' | 'Heavy' } weight Specified weight */
 function shsFont(lang, weight) {

@@ -130,7 +130,7 @@ function centerScaleGlyph(glyph, baseline, scaleFactor) {
   else {
     const scaleFilter = PostFilters.scaling(k);
     const translateFilter = PostFilters.translation(
-      500*(1-k), (500-120)*(1-k) + 120 - baseline);
+      0, (500-120)*(1-k) + 120 - baseline);
     filter = PostFilters.merge(scaleFilter, translateFilter);
   }
 
@@ -163,12 +163,13 @@ function lengthenGlyph(glyph, baseline, scaleFactor) {
  * @param { number } scaleFactor 
  * @returns { Glyph } */
 function puncLikeGlyph(glyph, baseline, scaleFactor) {
+  const contours = glyph.contours || [];
   // Not a full/half-width punctuation case
   if (glyph.advanceWidth < 1000 && glyph.advanceWidth !== 500) return {
     advanceWidth: glyph.advanceWidth,
     advanceHeight: glyph.advanceHeight,
     verticalOrigin: glyph.verticalOrigin + 120 - Math.round(baseline),
-    contours: glyph.contours
+    contours: contours
   };
 
   // This leading is the maximum em box compression
@@ -181,29 +182,24 @@ function puncLikeGlyph(glyph, baseline, scaleFactor) {
   const centering = 
     PostFilters.translation(
       (targetAdvance - glyph.advanceWidth)/2, 120 - baseline);
-  if (glyph.contours === undefined) return {
-    advanceWidth: targetAdvance,
-    advanceHeight: glyph.advanceHeight,
-    verticalOrigin: targetVerticalOrigin
-  }
 
-  const { minX, maxX } = boundingBox(glyph.contours);
+  const { minX, maxX } = boundingBox(contours);
   if (minX >= leading * 0.5 && maxX <= 1000 - leading * 0.5) return {
     advanceWidth: targetAdvance,
     advanceHeight: glyph.advanceHeight,
     verticalOrigin: targetVerticalOrigin,
-    contours: PostFilters.round()(centering(glyph.contours))
+    contours: PostFilters.round()(centering(contours))
   }; else if (maxX <= 1000 - leading) return {
     advanceWidth: targetAdvance,
     advanceHeight: glyph.advanceHeight,
     verticalOrigin: targetVerticalOrigin,
     contours: PostFilters.round()(
-      PostFilters.translation(0, 120 - baseline)(glyph.contours))
+      PostFilters.translation(0, 120 - baseline)(contours))
   }; else if (minX >= leading) return {
     advanceWidth: targetAdvance,
     advanceHeight: glyph.advanceHeight,
     verticalOrigin: targetVerticalOrigin,
-    contours: PostFilters.round()(translateLeft(glyph.contours))
+    contours: PostFilters.round()(translateLeft(contours))
   }; else return centerScaleGlyph(glyph, baseline, scaleFactor);
 }
 
@@ -212,14 +208,14 @@ function puncLikeGlyph(glyph, baseline, scaleFactor) {
  * @param { number } scaleFactor 
  * @returns { Glyph } */
 function latinGlyph(glyph, baseline, scaleFactor) {
-  const result = {
+  const contours = glyph.contours || [];
+  return {
     advanceWidth: Math.round(glyph.advanceWidth * scaleFactor),
     advanceHeight: 1000,
     verticalOrigin: 1000 - Math.round(baseline),
+    contours: PostFilters.round()(
+      PostFilters.scaling(scaleFactor)(contours))
   };
-  if (glyph.contours !== undefined) result.contours = PostFilters.round()(
-    PostFilters.scaling(scaleFactor)(glyph.contours));
-  return result;
 }
 
 module.exports = { hanModelFilter, kanaModelFilter, hanPostFilter,
