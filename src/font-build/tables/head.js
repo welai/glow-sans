@@ -1,6 +1,6 @@
 /** Get the `head` table
  * @param { string } verStr Font version string */
-function getTable(verStr, isBold) { 
+function getTable(verStr, width, weight) { 
     return {
         "version": 1.0,
         "fontRevision": parseFloat(verStr),
@@ -9,7 +9,12 @@ function getTable(verStr, isBold) {
             "lsbAtX_0": true
         },
         "unitsPerEm": 1000,
-        "macStyle": { bold: isBold },
+        "created": 3604521600,
+        "macStyle": { 
+            bold: weight === 'Bold',
+            condensed: width === 'Condensed',
+            extended: width === 'Extended'
+        },
         "lowestRecPPEM": 3,
         // "fontDirectoryHint": 2,
         "indexToLocFormat": 0,
