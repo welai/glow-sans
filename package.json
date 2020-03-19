@@ -1,11 +1,12 @@
 {
   "name": "glow-sans",
-  "version": "0.0.1",
+  "version": "0.9.0",
   "description": "Glow Sans CJK typeface",
   "main": "examples/index.js",
   "gypfile": true,
   "scripts": {
     "build-demo": "browserify demo/index.js -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/proposal-class-properties ] ] | uglifyjs -o dist/index.js",
+    "build-family": "node scripts/build-family.js",
     "convert-model": "python -m scripts.glyph_model_convert",
     "dump-fonts": "for FILE in fonts/*/*.otf; do otfccdump $FILE --pretty --ignore-glyph-order --hex-cmap -o ${FILE//.otf/.json}; done",
     "extract-han-models": "bash scripts/extract-han-models.sh",

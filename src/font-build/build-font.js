@@ -43,7 +43,8 @@ weight, weightClass, buildVersion, showProgress = false) {
   const name = require('./tables/name')(
     lang, weight, width, buildVersion);
   // CFF_ table
-  const CFF_ = require('./tables/CFF_')(lang, width, weight, buildVersion, param.width);
+  const CFF_ = require('./tables/CFF_')(
+    lang, width, weight, buildVersion, param.width);
   // OS_2 table
   const xHeight = Math.round(latinFont.OS_2.sxHeight * param.latinscale);
   const capHeight = Math.round(latinFont.OS_2.sCapHeight * param.latinscale);

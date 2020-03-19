@@ -183,6 +183,8 @@ function loadSaved(savedObject) {
       select.val('' + firaWidth);
       try { select[0].M_FormSelect._setValueToInput(); } catch (error) { }
     }
+    useFira = true;
+    document.getElementById('raleway-radio').checked = false;
   }
   const ralewayval = savedObject.raleway;
   if (ralewayval !== undefined) {

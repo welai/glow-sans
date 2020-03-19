@@ -27,15 +27,15 @@ function record(nameID, nameString, languageID) { return ({
  * @param { string } verStr         Font version string */
 function getTable (langStr, weightStr, widthStr, verStr) {
   const name = [
-    record(copyrightNotice,   'Glow Sans © 2020 Project Welai. Source Han Sans © 2014-2019 Adobe (http://www.adobe.com/). Fira Sans © 2012-2018 Mozilla & bBox Type. Raleway © 2012 The Raleway Authors.'),
+    record(copyrightNotice,   'Glow Sans © 2020 Project Welai'),
     record(familyName,        `Glow Sans ${widthStr}`),
     record(subfamilyName,     weightStr),
-    record(identifier,        `${verStr};WELA;GlowSans`),
-    record(fullName,          `Glow Sans ${langStr} ${widthStr}`),
+    record(identifier,        `${verStr};WELA;GlowSans$${langStr}-${widthStr}-${weightStr}`),
+    record(fullName,          `Glow Sans ${langStr} ${widthStr} ${weightStr}`),
     record(versionStr,        `Version ${verStr}`),
-    record(psName,            `GlowSans${langStr}-${widthStr}`),
+    record(psName,            `GlowSans${langStr}-${widthStr}-${weightStr}`),
     record(designer,          'Ryoko NISHIZUKA 西塚涼子 (kana, bopomofo & ideographs); Paul D. Hunt (Latin, Greek & Cyrillic); Sandoll Communications 산돌커뮤니케이션, Soo-young JANG 장수영 & Joo-yeon KANG 강주연 (hangul elements, letters & syllables); Glow Sans is built by Celestial Phineas.'),
-    record(description,       'Dr. Ken Lunde (project architect, glyph set definition & overall production); Masataka HATTORI 服部正貴 (production & ideograph elements)'),
+    record(description,       'Source Han Sans is built by Dr. Ken Lunde (project architect, glyph set definition & overall production); Masataka HATTORI 服部正貴 (production & ideograph elements)'),
     record(urlVendor,         'https://github.com/welai'),
     record(urlDesigner,       'https://github.com/celestialphineas'),
     record(licenseDesc,       'This Font Software is licensed under the SIL Open Font License, Version 1.1. This Font Software is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the SIL Open Font License for the specific language, permissions and limitations governing your use of this Font Software.'),
@@ -45,24 +45,24 @@ function getTable (langStr, weightStr, widthStr, verStr) {
     record(sampleText,        '青青子衿，悠悠我心。縱我不往，子寧不嗣音？')
   ];
   switch (langStr) {
-    case 'SC': [ zh_CN, zh_SG ].forEach((lang) => name.push(
+    case 'SC': [ zh_CN ].forEach((lang) => name.push(
       record(familyName,        `未来荧黑 ${widthStr}`, lang),
       record(subfamilyName,     `${weightStr}`, lang),
-      record(fullName,          `未来荧黑 ${widthStr}`, lang),
+      record(fullName,          `未来荧黑 ${widthStr} ${weightStr}`, lang),
       record(typoFamilyName,    `未来荧黑`, lang),
       record(typoSubfamilyName, `${widthStr} ${weightStr}`, lang)
     )); break;
-    case 'TC': [ zh_HK, zh_MO, zh_TW ].forEach((lang) => name.push(
+    case 'TC': [ zh_TW ].forEach((lang) => name.push(
       record(familyName,        `未来熒黑${widthStr}`, lang),
       record(subfamilyName,     `${weightStr}`, lang),
-      record(fullName,          `未来熒黑 ${widthStr}`, lang),
+      record(fullName,          `未来熒黑 ${widthStr} ${weightStr}`, lang),
       record(typoFamilyName,    `未来熒黑`, lang),
       record(typoSubfamilyName, `${widthStr} ${weightStr}`, lang)
     )); break;
     case 'J': [ jp ].forEach((lang) => name.push(
       record(familyName,        `ヒカリ角ゴ ${widthStr}`, lang),
       record(subfamilyName,     `${weightStr}`, lang),
-      record(fullName,          `ヒカリ角ゴ ${widthStr}`, lang),
+      record(fullName,          `ヒカリ角ゴ ${widthStr} ${weightStr}`, lang),
       record(typoFamilyName,    `ヒカリ角ゴ`, lang),
       record(typoSubfamilyName, `${widthStr} ${weightStr}`, lang)
     )); break;

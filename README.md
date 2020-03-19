@@ -55,10 +55,18 @@ Also, kana-like glyphs need glyph model conversion as well. Run,
 $ npm run extract-kana-models
 ```
 
+### Extract other information from Source Han Sans
+
 The other gid categories need glyph extraction only.
 
 ```
 $ npm run extract-gid-categories
+```
+
+Extract features from the CJK fonts.
+
+```
+$ npm run extract-shs-features
 ```
 
 ## Build demo
