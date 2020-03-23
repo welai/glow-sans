@@ -21,7 +21,7 @@
     "serve": "node scripts/serve-static.js"
   },
   "author": "Celestial Phineas",
-  "license": "OFL-1.1",
+  "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@babel/plugin-proposal-class-properties": "^7.8.3",

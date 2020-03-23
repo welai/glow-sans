@@ -1,7 +1,6 @@
 const cmaps = require('./res/cmaps');
 const gids = require('./res/gids');
-const { getGSUB, getGPOS, 
-  reduceGSUB, reduceGPOS, scaleGPOS } = require('./res/features');
+const { getGSUB, getGPOS, reduceGSUB, scaleGPOS } = require('./res/features');
 const { firaFont, ralewayFont, index2FiraName, index2RalewayName,
   listHanModelPaths, readModels, 
   extractedGlyphs, kanaLikeModels } = require('./res/glyph-data');
@@ -98,7 +97,9 @@ weight, weightClass, buildVersion, showProgress = false) {
     };
     let gid = latinFont.cmap[cid];
     if (shsSet.has(cmap[cid])) continue;
-    if (param.raleway && gid in ralewayNumbers) gid = ralewayNumbers[gid];
+    if (param.raleway !== undefined && gid in ralewayNumbers) {
+      gid = ralewayNumbers[gid];
+    }
     if (gid !== undefined) {
       glyf[cmap[cid]] = latinGlyph(
         latinFont.glyf[gid], param.baseline, param.latinscale);
@@ -177,14 +178,11 @@ weight, weightClass, buildVersion, showProgress = false) {
 
   //#region GSUB & GPOS tables
   const GSUB = reduceGSUB(getGSUB(lang, sourceWeight));
-  const GPOS = scaleGPOS(reduceGPOS(
-    getGPOS(lang, sourceWeight), shsSet), param.width);
-  const latinGPOS = scaleGPOS(reduceGPOS(
-    latinFont.GPOS, new Set(latinGids)), param.latinscale, param.latinscale);
+  const GPOS = scaleGPOS(getGPOS(lang, sourceWeight), param.width, 1);
+  const latinGPOS = scaleGPOS(latinFont.GPOS, param.latinscale, param.latinscale);
   // Merging Latin kern feature to the font
   const latinKern = latinGPOS.features[
-    latinGPOS.languages.DFLT_DFLT.features.filter(
-      x => x.startsWith('kern'))];
+    latinGPOS.languages.DFLT_DFLT.features.filter(x => x.startsWith('kern'))[0]];
   const kernFeatureName = Object.keys(GPOS.features).filter(
     x => x.startsWith('kern'))[0];
   latinKern.forEach(lookupName => {
@@ -201,8 +199,4 @@ weight, weightClass, buildVersion, showProgress = false) {
   return fontObject;
 }
 
-// const font = buildFont(
-//   getParam('regular-test'), 'SC', 'Normal', 5, 'Regular', 400, '0.8', true);
-// const font = buildFont(
-//   getParam('compressed-test'), 'SC', 'Compressed', 2, 'Regular', 400, '0.8');
 module.exports = buildFont;

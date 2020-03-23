@@ -1,14 +1,16 @@
 node_modules
 **/playground.*
 fonts/*.json
-fonts/*/*.otf
-fonts/*/*.json
 fonts/*/*.txt
+fonts/*/*.json
+fonts/*/*.otf
 fonts/*.zip
 dump/*.json
 working
 build-files/**/*.json
 build-files/**/*.otf
+build-files/**/*.7z
+build-files/**/*.zip
 
 __pycache__
 
