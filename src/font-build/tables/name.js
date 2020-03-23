@@ -28,7 +28,7 @@ function record(nameID, nameString, languageID) { return ({
 function getTable (langStr, weightStr, widthStr, verStr) {
   const name = [
     record(copyrightNotice,   'Glow Sans © 2020 Project Welai'),
-    record(familyName,        `Glow Sans ${widthStr}`),
+    record(familyName,        `Glow Sans ${langStr} ${widthStr}`),
     record(subfamilyName,     weightStr),
     record(identifier,        `${verStr};WELA;GlowSans$${langStr}-${widthStr}-${weightStr}`),
     record(fullName,          `Glow Sans ${langStr} ${widthStr} ${weightStr}`),
