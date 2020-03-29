@@ -51,6 +51,12 @@
 
 字型文件以[SIL Open Font License 1.1](../OFL.txt)發佈，此repo中構建字型開發的代碼以[MIT License](../LICENSE)發佈。
 
+## 鳴謝
+
+感謝諸位對專案的支持與幫助！（貢獻者以ID字母序排列）
+
+[@cathree3](https://github.com/cathree3), [@floating-cat](https://github.com/floating-cat)
+
 ## 鏈接
 
 * 歡迎訪問[浙江大學科技設計創新創業實驗室](http://www.next.zju.edu.cn)。如果你對字型設計（type design）、動態文字設計（kinetic typography）、漢字書法與篆刻藝術有豐富知識、濃厚興趣或獨到見解，並希望從事與之相關的算法、開發與設計工作，歡迎你加入我們。對漢字歷史變遷、設計方法或藝術理論與表現手法有著深入理解，能夠去深入思考未來的文字設計，對使用深度學習的計算機視覺領域有所實踐，圖形學基礎紮實，擅長Web或App開發的同學，都可能會成為我們的夥伴。詳情諮詢請致信本專案作者[Celestial Phineas](https://github.com/celestialphineas)：celestialphineas [AT] outlook [DOT] com

@@ -53,6 +53,12 @@ Developer: [Celestial Phineas](https://github.com/celestialphineas)
 
 Glow Sans fonts are released under [SIL Open Font License 1.1](../OFL.txt). Source codes are under [MIT License](../LICENSE).
 
+## Thank you!
+
+We hereby appreciate contributors of Glow Sans (names in alphabetic order).
+
+[@cathree3](https://github.com/cathree3), [@floating-cat](https://github.com/floating-cat)
+
 ## External links
 
 * [NextLab, Zhejiang University](http://www.next.zju.edu.cn)—our group is making efforts to apply computing techniques on Chinese typographic design and calligraphy, as well as exploring possiblities for future Chinese typographic design.
