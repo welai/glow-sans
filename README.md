@@ -65,4 +65,4 @@
 
 ## 链接
 
-* 欢迎访问[浙江大学科技设计创新创业实验室](http://www.next.zju.edu.cn)。如果你对活字字体设计 (type design)、动态文字设计 (kinetic typography)、汉字书法与篆刻艺术有丰富知识、浓厚兴趣或独到见解，并希望从事与之相关的算法、开发与设计工作，欢迎你加入我们。对汉字历史变迁、设计方法或艺术理论与表现手法有着深入理解，能够去深入思考未来的文字设计，对使用深度学习的计算机视觉领域有所实践，图形学基础扎实，擅长 Web 或 App 开发的同学，都可能会成为我们的伙伴。详情咨询请致信本项目的作者 [Celestial Phineas](https://github.com/celestialphineas)：celestialphineas [AT] outlook [DOT] com
+欢迎访问[浙江大学科技设计创新创业实验室](http://www.next.zju.edu.cn)。如果你对活字字体设计 (type design)、动态文字设计 (kinetic typography)、汉字书法与篆刻艺术有丰富知识、浓厚兴趣或独到见解，并希望从事与之相关的算法、开发与设计工作，欢迎你加入我们。对汉字历史变迁、设计方法或艺术理论与表现手法有着深入理解，能够去深入思考未来的文字设计，对使用深度学习的计算机视觉领域有所实践，图形学基础扎实，擅长 Web 或 App 开发的同学，都可能会成为我们的伙伴。详情咨询请致信本项目的作者 [Celestial Phineas](https://github.com/celestialphineas): celestialphineas [AT] outlook [DOT] com。
