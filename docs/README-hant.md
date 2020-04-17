@@ -37,7 +37,7 @@
 * **Q:** 爲什麽有的思源黑體支援的字在未來熒黑不支援？
 * **A:** 這些字元在寬度系列的處理上存在著很大難度，因此被暫時剔除了，例如“Enclosed CJK Letters And Months”。此外，暫時不支援 `ccmp`，並不計劃支持中日韓語言的 `locl` 特性。
 
-如果您還有其他問題或反饋，歡迎到 [Issues](https://github.com/welai/glow-sans/issues) 里面提出。
+如果您還有其他問題或反饋，歡迎到 [Issues](https://github.com/welai/glow-sans/issues) 裏面提出。
 
 ## 構建
 
