@@ -41,7 +41,7 @@
 
 ## 構建
 
-未來熒黑的構建完全使用代碼來完成，請閱讀[構建說明](build-instructions.md)來了解如何構建字型與 demo。
+未來熒黑的構建完全使用程式碼來完成，請閱讀[構建說明](build-instructions.md)來了解如何構建字型與 demo。
 
 ## 許可證
 
@@ -59,4 +59,4 @@
 
 ## 鏈接
 
-歡迎訪問[浙江大學科技設計創新創業實驗室](http://www.next.zju.edu.cn)。如果你對字型設計 (type design)、動態文字設計 (kinetic typography)、漢字書法與篆刻藝術有豐富知識、濃厚興趣或獨到見解，並希望從事與之相關的算法、開發與設計工作，歡迎你加入我們。對漢字歷史變遷、設計方法或藝術理論與表現手法有著深入理解，能夠去深入思考未來的文字設計，對使用深度學習的計算機視覺領域有所實踐，圖形學基礎紮實，擅長 Web 或 App 開發的同學，都可能會成為我們的夥伴。詳情諮詢請致信本專案作者 [Celestial Phineas](https://github.com/celestialphineas)：celestialphineas [AT] outlook [DOT] com
+歡迎訪問[浙江大學科技設計創新創業實驗室](http://www.next.zju.edu.cn)。如果你對字型設計 (type design)、動態文字設計 (kinetic typography)、漢字書法與篆刻藝術有豐富知識、濃厚興趣或獨到見解，並希望從事與之相關的算法、開發與設計工作，歡迎你加入我們。對漢字歷史變遷、設計方法或藝術理論與表現手法有著深入理解，能夠去深入思考未來的文字設計，對使用深度學習的計算機視覺領域有所實踐，圖形學基礎紮實，擅長 Web 或 App 開發的同學，都可能會成為我們的夥伴。詳情諮詢請致信本專案作者 [Celestial Phineas](https://github.com/celestialphineas): celestialphineas [AT] outlook [DOT] com。
