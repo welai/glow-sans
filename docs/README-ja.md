@@ -15,22 +15,22 @@
 
 ## オンラインデモ
 
-ヒカリ角ゴのパラメーターをインタラクティブに調整できる[オンラインデモ](https://welai.github.io/glow-sans)が開発されています。 パラメーターをエクスポートして、フォントのビルドに使用することもできます。
+ヒカリ角ゴのパラメーターをインタラクティブに調整できる[オンラインデモ](https://welai.github.io/glow-sans)を開発しました。 パラメーターをエクスポートして、フォントのビルドに使用することもできます。
 
 ## 源ノ角ゴシックとの違い
 
 ヒカリ角ゴは、7つのフォントからなる源ノ角ゴシックを44フォントにまで拡張し、ウェイトと幅を豊かにしました。
-<!-- Han ideographs' structures and strokes are both modified. -->また、欧文書体についても新たなマッチングを行いました。
+<!-- Han ideographs' structures and strokes are both modified. -->また、欧文書体についても新たな混植を行いました。
 
 ![Differences to Source Han Sans](../tests/diff.png)
 
 
 ## よくあるご質問
-* **Q:** ヒカリ角ゴは無料で商用利用できますか？
+* **Q:** ヒカリ角ゴは無料で商用利用できますか。
 <!-- Is Glow Sans free for commercial uses? -->
-* **A:** 可能です。ヒカリ角ゴはSIL Open Font License 1.1に基づきリリースされています。
+* **A:** できます。ヒカリ角ゴはSIL Open Font License 1.1に基づきリリースされています。
 <!-- Yes. Glow Sans is released under SIL Open Font License 1.1. -->
-* **Q:** ヒカリ角ゴはバリアブルフォントですか？
+* **Q:** ヒカリ角ゴはバリアブルフォントですか。
 <!-- Is this a variable font? -->
 * **A:** 違います。
 <!-- Glow Sans makes modifications to Source Han Sans to achieve goals like deforming glyphs and extending the font family. -->
@@ -41,18 +41,22 @@
 <!-- Is Hangul supported? -->
 * **A:** 現時点ではまだです。のちにサポートされるかもしれません。
 <!-- No. Perhaps later. -->
-* **Q:** Seems that the glyph contours are not in good quality.
-* **A:** Algorithms are not perfect. Glow Sans is only trying to offer a free substitution for modern style CJK sans-serif typeface with width variations. Anyway, improving quality of the output contours is an important technical goal.
-* **Q:** ある特定のグリフを修正してもよろしいでしょうか？
+* **Q:** グリフの輪郭があまりきれいではないようなのですが。
+<!-- Seems that the glyph contours are not in good quality. -->
+* **A:** アルゴリズムは完璧ではありません。これは、ヒカリ角ゴが、幅のバリエーションのある、現代的なサンセリフのCJK統合漢字書体を提供しようとしているからです。ただ、アウトプットの輪郭をよりよくすることは、技術的に重要な目標でもあります。
+<!-- Algorithms are not perfect. Glow Sans is only trying to offer a free substitution for modern style CJK sans-serif typeface with width variations. Anyway, improving quality of the output contours is an important technical goal. -->
+* **Q:** ある特定のグリフを修正してもよろしいでしょうか。
 <!-- Would you mind fixing some specific glyph? -->
-* **A:** 申し訳ありませんが、それは許可できません。問題があれば、コードを修正することで解決します。プルリクエストは歓迎です。
+* **A:** 申し訳ありませんが、それはできません。問題があれば、コードを修正することで解決します。プルリクエストは歓迎です。
 <!-- Sorry, I wouldn't. I would solve the problems if and only if I could solve it with codes. Pull requests are welcomed. -->
 * **Q:** TTFのバージョンは利用可能ですか？
 <!-- Is a TTF version available? -->
 * **A:** 現在はできません。おそらく、次のバージョンで可能になると思います。
 <!-- Currently no. Perhaps the next version -->
-* **Q:** Why are some characters not supported while they are avaible in Source Han Sans?
-* **A:** The corresponding glyphs are too difficult to be compressed or extended, so they are temporarily removed. Besides, `ccmp` feature is not yet supported either, and we do not have any plan to include `locl` features for CJK ideographs.
+* **Q:** 一部の文字について、源ノ角ゴシックでは使えるのに、ヒカリ角ゴではサポートされていないのはなぜでしょうか。
+<!-- Why are some characters not supported while they are avaible in Source Han Sans? -->
+* **A:** 対応するグリフは幅の拡縮が難しく、現在のところ含められていません。また、「ccmp」機能もサポートされておらず、「locl」機能をCJK表意文字に含める計画もありません。
+<!-- The corresponding glyphs are too difficult to be compressed or extended, so they are temporarily removed. Besides, `ccmp` feature is not yet supported either, and we do not have any plan to include `locl` features for CJK ideographs. -->
 
 ## ビルド
 フォントをビルドするための指示書、ならびにデモについては、[build-instructions.md](build-instructions.md)をご確認ください。
