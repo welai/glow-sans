@@ -23,11 +23,6 @@ Download font files to directory `fonts`,
 $ npm run init-fonts
 ```
 
-If you live in China, add argument `-m` would speed up the downloading process using the gitee mirrors.
-```
-$ npm run init-fonts -m
-```
-
 ### Dump fonts
 
 Dump the OpenType fonts to otfcc json files.

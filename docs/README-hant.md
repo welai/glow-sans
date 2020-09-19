@@ -4,7 +4,7 @@
 
 未來熒黑是一個基於[思源黑體](https://github.com/adobe-fonts/source-han-sans)、[Fira Sans](https://github.com/mozilla/Fira) 和 [Raleway](https://github.com/impallari/Raleway) 的開源字型專案，支援簡體中文、繁體中文與日文；思源黑體的 7 字重被擴展為 9 字重，並提供了寬度系列，全家族共 44 款字型。未來熒黑繁體中文版的漢字部分係改造自思源黑體韓文版，以更接近傳統印刷習慣。
 
-相比於思源黑體，未來熒黑的造型更加簡明現代，版面效果清新輕快。未來熒黑的中宮與字面更加收斂，重心在字重之間經過了重新配置；筆畫細節上處理得更加幹練，簡潔而平直化。您可以下載[樣張](../tests/family-specimen.pdf)來預覽未來熒黑的設計。
+相比於思源黑體，未來熒黑的造型更加簡明現代，版面效果清新輕快。未來熒黑的中宮與字面更加收斂，重心在字重之間經過了重新配置；筆畫細節上處理得更加乾淨，簡潔而平直化。您可以下載[樣張](../tests/family-specimen.pdf)來預覽未來熒黑的設計。
 
 未來熒黑的實現介於參數化與輪廓濾鏡，使用了圖像處理算法對字形建模。字型的製作並沒有借助字型設計軟體，而是用一個 Web 實現的[可視化調參工具](https://welai.github.io/glow-sans)來確定字型參數。
 
@@ -55,7 +55,7 @@
 
 感謝諸位對專案的支持與幫助！（貢獻者以 ID 字母序排列）
 
-[@cathree3](https://github.com/cathree3), [@floating-cat](https://github.com/floating-cat)
+[@cathree3](https://github.com/cathree3), [@floating-cat](https://github.com/floating-cat), [@khsacc](https://github.com/khsacc), [@merrickluo](https://github.com/merrickluo), [@sgalal](https://github.com/sgalal)
 
 ## 鏈接
 

@@ -53,7 +53,7 @@
 ## コントリビューター
 ヒカリ角ゴへのコントリビューターの皆様へ、この場をお借りして感謝申し上げます。お名前はアルファベット順に列挙しています。
 
-[@cathree3](https://github.com/cathree3), [@floating-cat](https://github.com/floating-cat)
+[@cathree3](https://github.com/cathree3), [@floating-cat](https://github.com/floating-cat), [@khsacc](https://github.com/khsacc), [@merrickluo](https://github.com/merrickluo), [@sgalal](https://github.com/sgalal)
 
 ## 外部リンク
 * [NextLab, Zhejiang University](http://www.next.zju.edu.cn)――私たちのグループは、中国語のタイポグラフィーデザインやカリグラフィに情報処理技術を応用することを目指して尽力しており、未来の中国語の書体デザインの可能性を拡げてゆきます。

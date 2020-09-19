@@ -57,7 +57,7 @@ Glow Sans fonts are released under [SIL Open Font License 1.1](../OFL.txt). Sour
 
 We hereby appreciate contributors of Glow Sans (names in alphabetic order).
 
-[@cathree3](https://github.com/cathree3), [@floating-cat](https://github.com/floating-cat)
+[@cathree3](https://github.com/cathree3), [@floating-cat](https://github.com/floating-cat), [@khsacc](https://github.com/khsacc), [@merrickluo](https://github.com/merrickluo), [@sgalal](https://github.com/sgalal)
 
 ## External links
 

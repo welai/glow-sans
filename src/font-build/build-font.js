@@ -81,7 +81,7 @@ weight, weightClass, buildVersion, showProgress = false) {
   //#region Handling cmap & glyf tables
   switch (lang) {
     case 'SC': cmap = cmaps.shsSC; shsSet = gids.setSC; break;
-    case 'TC': case 'K': cmap = cmaps.shsK; shsSet = gids.setK; break;
+    case 'TC': case 'K': cmap = cmaps.shsK; shsSet = gids.setTC; break;
     case 'J': cmap = cmaps.shsJ; shsSet = gids.setJ; break;
     default: throw Error(`Unknown lang tag ${lang} specified`);
   }

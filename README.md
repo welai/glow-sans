@@ -6,7 +6,7 @@
 
 未来荧黑是一个基于[思源黑体](https://github.com/adobe-fonts/source-han-sans)、[Fira Sans](https://github.com/mozilla/Fira) 和 [Raleway](https://github.com/impallari/Raleway) 的开源字体项目，支持简体中文、繁体中文与日文；思源黑体的 7 字重被扩展为 9 字重，并提供了宽度系列，全家族共 44 款字体。
 
-相比于思源黑体，未来荧黑的造型更加简明现代，版面效果清新轻快。未来荧黑的中宫与字面更加收敛，重心在字重之间经过了重新配置；笔画细节上处理得更加干练，简洁而平直化。您可以下载[样张](tests/family-specimen.pdf)来预览未来荧黑的设计。
+相比于思源黑体，未来荧黑的造型更加简明现代，版面效果清新轻快。未来荧黑的中宫与字面更加收敛，重心在字重之间经过了重新配置；笔画细节上处理得更加干净，简洁而平直化。您可以下载[样张](tests/family-specimen.pdf)来预览未来荧黑的设计。
 
 未来荧黑的实现介于参数化与轮廓滤镜，使用了图像处理算法对字形建模。字体的制作并没有借助字体设计软件，而是用一个 Web 实现的[可视化调参工具](https://welai.github.io/glow-sans)来确定字体参数。
 
@@ -61,7 +61,7 @@
 
 感谢诸位对项目的支持与帮助！（贡献者以 ID 字母序排列）
 
-[@cathree3](https://github.com/cathree3), [@floating-cat](https://github.com/floating-cat)
+[@cathree3](https://github.com/cathree3), [@floating-cat](https://github.com/floating-cat), [@khsacc](https://github.com/khsacc), [@merrickluo](https://github.com/merrickluo), [@sgalal](https://github.com/sgalal)
 
 ## 链接
 

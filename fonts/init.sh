@@ -1,6 +1,7 @@
 #!/bin/bash
 
 wget https://raw.githubusercontent.com/adobe-fonts/source-han-sans/release/OTF/SourceHanSansSC.zip &
+wget https://raw.githubusercontent.com/adobe-fonts/source-han-sans/release/OTF/SourceHanSansTC.zip &
 wget https://raw.githubusercontent.com/adobe-fonts/source-han-sans/release/OTF/SourceHanSansK.zip &
 wget https://raw.githubusercontent.com/adobe-fonts/source-han-sans/release/OTF/SourceHanSansJ.zip &
 wait
@@ -92,11 +93,5 @@ wget https://raw.githubusercontent.com/MoneMizuno/Genne-Gothic/master/GenneGothi
 wget https://raw.githubusercontent.com/MoneMizuno/Genne-Gothic/master/GenneGothic-Heavy.otf &
 wait
 cd ..
-
-for FILE in */*.otf; do
-  echo otfccdump $FILE
-  otfccdump $FILE --pretty --ignore-hints --ignore-glyph-order --hex-cmap -o ${FILE//.otf/.json}
-  echo done
-done
 
 wait

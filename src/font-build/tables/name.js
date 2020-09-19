@@ -13,7 +13,7 @@ const copyrightNotice   = 0,  familyName        = 1,
                               sampleText        = 19;
 
 function record(nameID, nameString, languageID) { return ({
-  "platformID": 1,
+  "platformID": 3,
   "encodingID": 1,
   "languageID": languageID || 0x0409,
   "nameID": nameID,
