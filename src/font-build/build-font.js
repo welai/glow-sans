@@ -56,7 +56,7 @@ weight, weightClass, buildVersion, showProgress = false) {
   //#endregion
 
   // Source language
-  const hanLang = lang === 'TC'? 'K' : lang;
+  const hanLang = lang;
   // Source weight
   const sourceWeight = [ 'ExtraLight', 'Light', 'Normal', 'Regular', 'Medium',
     'Bold', 'Heavy' ][param.shs];
@@ -81,7 +81,7 @@ weight, weightClass, buildVersion, showProgress = false) {
   //#region Handling cmap & glyf tables
   switch (lang) {
     case 'SC': cmap = cmaps.shsSC; shsSet = gids.setSC; break;
-    case 'TC': case 'K': cmap = cmaps.shsK; shsSet = gids.setTC; break;
+    case 'TC': cmap = cmaps.shsTC; shsSet = gids.setTC; break;
     case 'J': cmap = cmaps.shsJ; shsSet = gids.setJ; break;
     default: throw Error(`Unknown lang tag ${lang} specified`);
   }
