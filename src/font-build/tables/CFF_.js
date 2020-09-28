@@ -21,7 +21,7 @@ function getTable(langStr, widthStr, weightStr, verStr, widthFactor) {
     weight: `${weightStr}`,
     cidRegistry: 'Adobe',
     cidOrdering: 'Identity',
-    cidSupplement: 'Identity',
+    cidSupplement: 0,
     fdArray: {
       [fd]: { privates: {
         defaultWidthX: Math.round(1000 * widthFactor),

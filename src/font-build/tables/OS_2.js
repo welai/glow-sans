@@ -38,7 +38,7 @@ function getTable(weightClass, widthClass, xHeight, capHeight) {
       "Bopomofo": true, // done
       // "Hangul_Compatibility_Jamo": true,
       // "Enclosed_CJK_Letters_And_Months": true,
-      // "CJK_Compatibility": true,
+      "CJK_Compatibility": true,
       // "Hangul_Syllables": true,
       "Non_Plane_0": true, // done
       "CJK_Unified_Ideographs": true, // done
@@ -50,7 +50,7 @@ function getTable(weightClass, widthClass, xHeight, capHeight) {
       "Halfwidth_And_Fullwidth_Forms": true // done
     },
     "ulUnicodeRange4": {},
-    "fsSelection": {},
+    "fsSelection": { "bold": weightClass === 700 },
     "sTypoAscender": 880,
     "sTypoDescender": -120,
     "sTypoLineGap": 0,
