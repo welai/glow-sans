@@ -1,7 +1,10 @@
 /** Get the `OS/2` table
  * @param { number } weightClass  Weight class 
- * @param { number } widthClass   Width class */
-function getTable(weightClass, widthClass, xHeight, capHeight) { 
+ * @param { number } widthClass   Width class
+ * @param { number } xHeight      x-height
+ * @param { number } capHeight    capital height
+ * @param { 'SC' | 'TC' | 'J' } langStr Language string */
+function getTable(weightClass, widthClass, xHeight, capHeight, langStr) { 
   return {
     "version": 3,
     "usWeightClass": weightClass,
@@ -61,10 +64,9 @@ function getTable(weightClass, widthClass, xHeight, capHeight) {
       "latin2": true,
       "cyrillic": true,
       "vietnamese": true,
-      "jis": true,
-      "gbk": true,
-      // "korean": true,
-      // "koreanJohab": true,
+      "jis": langStr === 'J',
+      "gbk": langStr === 'SC',
+      "big5": langStr === 'TC',
       "macRoman": true,
       "oem": true
     },

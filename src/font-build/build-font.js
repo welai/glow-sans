@@ -48,7 +48,7 @@ weight, weightClass, buildVersion, showProgress = false) {
   const xHeight = Math.round(latinFont.OS_2.sxHeight * param.latinscale);
   const capHeight = Math.round(latinFont.OS_2.sCapHeight * param.latinscale);
   const OS_2 = require('./tables/OS_2')(
-    weightClass, widthClass, xHeight, capHeight);
+    weightClass, widthClass, xHeight, capHeight, lang);
   // post table
   const post = require('./tables/post')(param.baseline, param.hstroke);
   // vhea table

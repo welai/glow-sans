@@ -3,7 +3,7 @@ const cp = require('child_process');
 const buildFont = require('../src/font-build/build-font');
 const { getParam } = require('../src/font-build/res/params');
 
-const version = '0.91';
+const version = '0.92';
 
 [
   'SC', 
