@@ -7,8 +7,8 @@ wget https://raw.githubusercontent.com/adobe-fonts/source-han-sans/release/OTF/S
 wait
 unzip \*.zip
 
-mkdir Fira
-cd Fira
+mkdir "Fira"
+cd "Fira"
 wget https://raw.githubusercontent.com/bBoxType/FiraSans/master/Fira_Sans_4_3/Fonts/Fira_Sans_OTF_4301/Normal/Roman/FiraSans-Two.otf &
 wget https://raw.githubusercontent.com/bBoxType/FiraSans/master/Fira_Sans_4_3/Fonts/Fira_Sans_OTF_4301/Normal/Roman/FiraSans-Four.otf &
 wget https://raw.githubusercontent.com/bBoxType/FiraSans/master/Fira_Sans_4_3/Fonts/Fira_Sans_OTF_4301/Normal/Roman/FiraSans-Eight.otf &
@@ -67,8 +67,8 @@ wget https://raw.githubusercontent.com/bBoxType/FiraSans/master/Fira_Sans_4_3/Fo
 wait
 cd ..
 
-mkdir Raleway
-cd Raleway
+mkdir "Raleway"
+cd "Raleway"
 wget https://raw.githubusercontent.com/impallari/Raleway/master/fonts/v4020/Raleway-v4020-Thin.otf &
 wget https://raw.githubusercontent.com/impallari/Raleway/master/fonts/v4020/Raleway-v4020-ExtraLight.otf &
 wget https://raw.githubusercontent.com/impallari/Raleway/master/fonts/v4020/Raleway-v4020-Light.otf &
@@ -82,8 +82,8 @@ wget https://raw.githubusercontent.com/impallari/Raleway/master/fonts/v4020/Rale
 wait
 cd ..
 
-mkdir Genne
-cd Genne
+mkdir "Genne"
+cd "Genne"
 wget https://raw.githubusercontent.com/MoneMizuno/Genne-Gothic/master/GenneGothic-ExtraLight.otf &
 wget https://raw.githubusercontent.com/MoneMizuno/Genne-Gothic/master/GenneGothic-Light.otf &
 wget https://raw.githubusercontent.com/MoneMizuno/Genne-Gothic/master/GenneGothic-Normal.otf &

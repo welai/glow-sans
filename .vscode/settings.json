@@ -1,3 +1,4 @@
 {
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "python.pythonPath": "/Users/celestialphineas/anaconda3/envs/glow/bin/python"
 }
