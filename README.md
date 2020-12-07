@@ -16,7 +16,7 @@
 
 ```shell
 brew tap homebrew/cask-fonts
-brew install --cask font-glow-sans-sc-compressed font-glow-sans-sc-condensed font-glow-sans-sc-extended font-glow-sans-sc-normal font-glow-sans-sc-wid
+brew install --cask font-glow-sans-sc-compressed font-glow-sans-sc-condensed font-glow-sans-sc-extended font-glow-sans-sc-normal font-glow-sans-sc-wide
 ```
 
 ## 国内镜像
