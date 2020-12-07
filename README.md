@@ -12,7 +12,12 @@
 
 ## 下载
 
-版本更新与下载链接会更新在 [Release 发布页](https://github.com/welai/glow-sans/releases)。
+版本更新与下载链接会更新在 [Release 发布页](https://github.com/welai/glow-sans/releases)。如果您使用 `macOS` 操作系统，可以用 [Homebrew](https://brew.sh/) 包管理器来安装未来荧黑，如简体中文版的字体：
+
+```shell
+brew tap homebrew/cask-fonts
+brew install --cask font-glow-sans-sc-compressed font-glow-sans-sc-condensed font-glow-sans-sc-extended font-glow-sans-sc-normal font-glow-sans-sc-wid
+```
 
 ## 国内镜像
 
