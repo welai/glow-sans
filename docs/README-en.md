@@ -10,7 +10,13 @@ Implementation of Glow Sans is somewhat between parametrization and contour filt
 
 ## Downloading the fonts
 
-Font downloading information will be published on the [GitHub Release Page](https://github.com/welai/glow-sans/releases).
+Font downloading information will be published on the [GitHub Release Page](https://github.com/welai/glow-sans/releases). If you use the `macOS` operating system,
+you could install Glow Sans with [Homebrew](https://brew.sh/) package manager. For example, installing simplified Chinese:
+
+```shell
+brew tap homebrew/cask-fonts
+brew install --cask font-glow-sans-sc-compressed font-glow-sans-sc-condensed font-glow-sans-sc-extended font-glow-sans-sc-normal font-glow-sans-sc-wid
+```
 
 ## Online demo
 
