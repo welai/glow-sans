@@ -33,7 +33,9 @@ function getTable (langStr, weightStr, widthStr, verStr) {
   const postFamilyName = [ 'Regular', 'Bold' ].includes(weightStr) ? '' : ` ${weightStr}`;
   const name = [
     record(copyrightNotice,   'Glow Sans © 2020 Project Welai'),
-    record(familyName,        `Glow Sans ${langStr} ${widthStr}` + postFamilyName),
+    record(familyName,        `Glow Sans ${langStr} ${widthStr}`, { languageID: 0, platformID: MACINTOSH }),
+    record(familyName,        `Glow Sans ${langStr} ${widthStr}${postFamilyName}`),
+    record(subfamilyName,     `${weightStr}`, { languageID: 0, platformID: MACINTOSH }),
     record(subfamilyName,     weightStr === 'Bold' ? 'Bold' : 'Regular'),
     record(identifier,        `${verStr};WELA;GlowSans${langStr}-${widthStr}-${weightStr}`),
     record(fullName,          `Glow Sans ${langStr} ${widthStr} ${weightStr}`),
@@ -51,21 +53,21 @@ function getTable (langStr, weightStr, widthStr, verStr) {
   ];
   switch (langStr) {
     case 'SC': name.push(
-      record(familyName,        `未来荧黑 ${widthStr}` + postFamilyName,      { languageID: zh_CN_WIN }),
+      record(familyName,        `未来荧黑 ${widthStr}${postFamilyName}`,      { languageID: zh_CN_WIN }),
       record(subfamilyName,     weightStr === 'Bold' ? 'Bold' : 'Regular',  { languageID: zh_CN_WIN }),
       record(fullName,          `未来荧黑 ${widthStr} ${weightStr}`,          { languageID: zh_CN_WIN }),
       record(typoFamilyName,    `未来荧黑`,                                   { languageID: zh_CN_WIN }),
       record(typoSubfamilyName, `${widthStr} ${weightStr}`,                 { languageID: zh_CN_WIN })
     ); break;
     case 'TC': name.push(
-      record(familyName,        `未来熒黑${widthStr}` + postFamilyName,       { languageID: zh_TW_WIN }),
+      record(familyName,        `未来熒黑${widthStr}${postFamilyName}`,       { languageID: zh_TW_WIN }),
       record(subfamilyName,     weightStr === 'Bold' ? 'Bold' : 'Regular',  { languageID: zh_TW_WIN }),
       record(fullName,          `未来熒黑 ${widthStr} ${weightStr}`,          { languageID: zh_TW_WIN }),
       record(typoFamilyName,    `未来熒黑`,                                   { languageID: zh_TW_WIN }),
       record(typoSubfamilyName, `${widthStr} ${weightStr}`,                 { languageID: zh_TW_WIN }),
     ); break;
     case 'J': name.push(
-      record(familyName,        `ヒカリ角ゴ ${widthStr}` + postFamilyName,    { languageID: ja_WIN }),
+      record(familyName,        `ヒカリ角ゴ ${widthStr}${postFamilyName}`,    { languageID: ja_WIN }),
       record(subfamilyName,     weightStr === 'Bold' ? 'Bold' : 'Regular',  { languageID: ja_WIN }),
       record(fullName,          `ヒカリ角ゴ ${widthStr} ${weightStr}`,        { languageID: ja_WIN }),
       record(typoFamilyName,    `ヒカリ角ゴ`,                                 { languageID: ja_WIN }),

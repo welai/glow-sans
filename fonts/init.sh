@@ -1,11 +1,20 @@
 #!/bin/bash
 
-wget https://raw.githubusercontent.com/adobe-fonts/source-han-sans/release/OTF/SourceHanSansSC.zip &
-wget https://raw.githubusercontent.com/adobe-fonts/source-han-sans/release/OTF/SourceHanSansTC.zip &
-wget https://raw.githubusercontent.com/adobe-fonts/source-han-sans/release/OTF/SourceHanSansK.zip &
-wget https://raw.githubusercontent.com/adobe-fonts/source-han-sans/release/OTF/SourceHanSansJ.zip &
+wget https://raw.githubusercontent.com/adobe-fonts/source-han-sans/2.001R/OTF/SourceHanSansSC.zip &
+wget https://raw.githubusercontent.com/adobe-fonts/source-han-sans/2.001R/OTF/SourceHanSansTC.zip &
+wget https://raw.githubusercontent.com/adobe-fonts/source-han-sans/2.001R/OTF/SourceHanSansK.zip &
+wget https://raw.githubusercontent.com/adobe-fonts/source-han-sans/2.001R/OTF/SourceHanSansJ.zip &
 wait
-unzip \*.zip
+
+ZIP_FILES=$(ls SourceHanSans*.zip)
+for FILE in $ZIP_FILES; do
+  unzip $FILE
+  SHS_DIR="${FILE//.zip}"
+  if [[ ! -d "$SHS_DIR" ]]; then
+    mkdir "$SHS_DIR"
+    mv SourceHanSans*.otf "$SHS_DIR"
+  fi
+done
 
 mkdir "Fira"
 cd "Fira"

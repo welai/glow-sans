@@ -60,7 +60,7 @@ brew install --cask font-glow-sans-tc-compressed font-glow-sans-tc-condensed fon
 
 感謝諸位對專案的支持與幫助！（貢獻者以 ID 字母序排列）
 
-[@cathree3](https://github.com/cathree3), [@floating-cat](https://github.com/floating-cat), [@khsacc](https://github.com/khsacc), [@merrickluo](https://github.com/merrickluo), [@sgalal](https://github.com/sgalal)
+[@cathree3](https://github.com/cathree3), [@floating-cat](https://github.com/floating-cat), [@khsacc](https://github.com/khsacc), [@merrickluo](https://github.com/merrickluo), [@sgalal](https://github.com/sgalal), [@singularitti](https://github.com/singularitti)
 
 ## 鏈接
 
