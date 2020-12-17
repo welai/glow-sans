@@ -16,13 +16,12 @@ const copyrightNotice   = 0,  familyName        = 1,
                               sampleText        = 19;
 
 function record(nameID, nameString, 
-{ languageID = 0x0409, platformID = WINDOWS } = {}) { return ({
-  "platformID": platformID,
-  "encodingID": 1,
-  "languageID": languageID,
-  "nameID": nameID,
-  "nameString": nameString
-}); }
+{ languageID = 0x0409, platformID = WINDOWS, encodingID = 1 } = {}) { 
+  return ({ platformID, encodingID, languageID, nameID, nameString }); }
+
+const designerStr = 'Ryoko NISHIZUKA 西塚涼子 (kana, bopomofo & ideographs); Paul D. Hunt (Latin, Greek & Cyrillic); Sandoll Communications 산돌커뮤니케이션, Soo-young JANG 장수영 & Joo-yeon KANG 강주연 (hangul elements, letters & syllables); Glow Sans is built by Celestial Phineas.';
+const descriptionStr = 'Source Han Sans is built by Dr. Ken Lunde (project architect, glyph set definition & overall production); Masataka HATTORI 服部正貴 (production & ideograph elements)';
+const licenseDescStr = 'This Font Software is licensed under the SIL Open Font License, Version 1.1. This Font Software is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the SIL Open Font License for the specific language, permissions and limitations governing your use of this Font Software.';
 
 /** Get the `name` table
  * @param { 'SC'|'TC'|'J' } langStr Language string
@@ -31,21 +30,33 @@ function record(nameID, nameString,
  * @param { string } verStr         Font version string */
 function getTable (langStr, weightStr, widthStr, verStr) {
   const postFamilyName = [ 'Regular', 'Bold' ].includes(weightStr) ? '' : ` ${weightStr}`;
+  const macConfig = { languageID: ro_MAC, encodingID: 0, platformID: MACINTOSH };
   const name = [
+    record(copyrightNotice,   'Glow Sans © 2020 Project Welai', macConfig),
     record(copyrightNotice,   'Glow Sans © 2020 Project Welai'),
-    record(familyName,        `Glow Sans ${langStr} ${widthStr}`, { languageID: 0, platformID: MACINTOSH }),
+    record(familyName,        `Glow Sans ${langStr} ${widthStr}`, macConfig),
     record(familyName,        `Glow Sans ${langStr} ${widthStr}${postFamilyName}`),
-    record(subfamilyName,     `${weightStr}`, { languageID: 0, platformID: MACINTOSH }),
+    record(subfamilyName,     `${weightStr}`, macConfig),
     record(subfamilyName,     weightStr === 'Bold' ? 'Bold' : 'Regular'),
+    record(identifier,        `${verStr};WELA;GlowSans${langStr}-${widthStr}-${weightStr}`, macConfig),
     record(identifier,        `${verStr};WELA;GlowSans${langStr}-${widthStr}-${weightStr}`),
+    record(fullName,          `Glow Sans ${langStr} ${widthStr} ${weightStr}`, macConfig),
     record(fullName,          `Glow Sans ${langStr} ${widthStr} ${weightStr}`),
+    record(versionStr,        `Version ${verStr}`, macConfig),
     record(versionStr,        `Version ${verStr}`),
+    record(psName,            `GlowSans${langStr}-${widthStr}-${weightStr}`, macConfig),
     record(psName,            `GlowSans${langStr}-${widthStr}-${weightStr}`),
-    record(designer,          'Ryoko NISHIZUKA 西塚涼子 (kana, bopomofo & ideographs); Paul D. Hunt (Latin, Greek & Cyrillic); Sandoll Communications 산돌커뮤니케이션, Soo-young JANG 장수영 & Joo-yeon KANG 강주연 (hangul elements, letters & syllables); Glow Sans is built by Celestial Phineas.'),
-    record(description,       'Source Han Sans is built by Dr. Ken Lunde (project architect, glyph set definition & overall production); Masataka HATTORI 服部正貴 (production & ideograph elements)'),
+    record(designer,          designerStr, macConfig),
+    record(designer,          designerStr),
+    record(description,       descriptionStr, macConfig),
+    record(description,       descriptionStr),
+    record(urlVendor,         'https://github.com/welai', macConfig),
     record(urlVendor,         'https://github.com/welai'),
+    record(urlDesigner,       'https://github.com/celestialphineas', macConfig),
     record(urlDesigner,       'https://github.com/celestialphineas'),
-    record(licenseDesc,       'This Font Software is licensed under the SIL Open Font License, Version 1.1. This Font Software is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the SIL Open Font License for the specific language, permissions and limitations governing your use of this Font Software.'),
+    record(licenseDesc,       licenseDescStr, macConfig),
+    record(licenseDesc,       licenseDescStr),
+    record(urlLicense,        'http://scripts.sil.org/OFL', macConfig),
     record(urlLicense,        'http://scripts.sil.org/OFL'),
     record(typoFamilyName,    `Glow Sans ${langStr}`),
     record(typoFamilyName,    `Glow Sans ${langStr}`),

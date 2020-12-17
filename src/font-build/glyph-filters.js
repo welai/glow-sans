@@ -184,7 +184,8 @@ function puncLikeGlyph(glyph, baseline, scaleFactor) {
       (targetAdvance - glyph.advanceWidth)/2, 120 - baseline);
 
   const { minX, maxX } = boundingBox(contours);
-  if (minX >= leading * 0.5 && maxX <= 1000 - leading * 0.5) return {
+  if (glyph.advanceWidth === 500 
+  || minX >= leading * 0.5 && maxX <= 1000 - leading * 0.5) return {
     advanceWidth: targetAdvance,
     advanceHeight: glyph.advanceHeight,
     verticalOrigin: targetVerticalOrigin,

@@ -5,8 +5,8 @@ const process = require('process');
 const exec = util.promisify(require('child_process').exec);
 
 let nProcesses = 4;
-const argv1 = parseInt(process.argv[1]);
-if (!isNaN(argv1)) nProcesses = argv1;
+const argv2 = parseInt(process.argv[2].replace(/"/g, ''));
+if (!isNaN(argv2)) nProcesses = argv2;
 
 const weights = [ 'ExtraLight', 'Light', 'Normal', 
   'Regular', 'Medium', 'Bold', 'Heavy' ];
@@ -22,7 +22,7 @@ function toChunks(array, chunkSize) {
 
 (async () => {
   for (const weight of weights) {
-    async function extract(extractDir, modelDir, encodingDir, fontName) {
+    async function extract(extractDir, modelDir, encodingDir, fontName, fallbackFontName) {
       fs.mkdirSync(extractDir, { recursive: true });
       fs.mkdirSync(modelDir, { recursive: true });
     
@@ -35,8 +35,9 @@ function toChunks(array, chunkSize) {
           
           await exec(`node \
             scripts/extract-han-gid.js \
+            ${path.join(encodingDir, filename)} ${path.join(extractDir, target)} \
             ${fontName(weight)} \
-            ${path.join(encodingDir, filename)} ${path.join(extractDir, target)}`);
+            ${fallbackFontName ? fallbackFontName(weight) : ''}`);
           console.log(`${path.join(extractDir, target)} extracted.`)
           
           await exec(`npm run convert-model\
@@ -58,12 +59,13 @@ function toChunks(array, chunkSize) {
     
     // Extract TC/K
     await extract(
-      `build-files/extracted/shs-tc/${weight}`,
-      `build-files/models/shs-tc/${weight}`,
+      `build-files/extracted/genne/${weight}`,
+      `build-files/models/genne/${weight}`,
       `encoding/gid/shs-tc-han/`,
-      w => `fonts/Genne/GenneGothic-${w}.json`
+      w => `fonts/Genne/GenneGothic-${w}.json`,
+      w => `fonts/SourceHanSansK/SourceHanSansK-${w}.json`
     );
-    
+
     // Extract J
     await extract(
       `build-files/extracted/shs-j/${weight}`,

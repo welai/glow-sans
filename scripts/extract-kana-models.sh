@@ -17,8 +17,8 @@ for WEIGHT in $WEIGHTS; do
   if [ -f $MODEL_DIR/$WEIGHT.json ]; then continue; fi
   echo "Extracting $EXTRACT_DIR/$WEIGHT.json..."
   node  "scripts/extract-han-gid.js" \
-        "fonts/SourceHanSansJ/SourceHanSans-$WEIGHT.json" \
-        "encoding/gid/kana-like.tsv" "$EXTRACT_DIR/$WEIGHT.json" &&
+        "encoding/gid/kana-like.tsv" "$EXTRACT_DIR/$WEIGHT.json" \
+        "fonts/SourceHanSansJ/SourceHanSans-$WEIGHT.json" &&
   echo "Done, now converting to glyph model..."
   npm run convert-model $EXTRACT_DIR/$WEIGHT.json $MODEL_DIR/$WEIGHT.json &&
   rm $EXTRACT_DIR/$WEIGHT.json &

@@ -25,7 +25,7 @@ const version = (arr => `${arr[0]}.${arr.slice(1).join('')}`)(
       weight, weightClass, version, true);
     fs.writeFileSync(outname, JSON.stringify(font));
     console.log(`Building otf...`);
-    cp.execSync(`otfccbuild -q --merge-features --merge-lookups --subroutinize ${outname} -o ${fontname}`);
+    cp.execSync(`otfccbuild -q --dummy-dsig --merge-features --merge-lookups --subroutinize ${outname} -o ${fontname}`);
   }
 
   saveOtfcc('glow/180', 'Compressed', 2, 'Thin', 100);
